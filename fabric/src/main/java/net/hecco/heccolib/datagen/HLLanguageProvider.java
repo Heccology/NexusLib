@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class HLLanguageProvider extends FabricLanguageProvider {
 
-    public final String MOD_ID;
+    private final String MOD_ID;
 
     protected HLLanguageProvider(String modId, FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
         super(dataOutput, registryLookup);

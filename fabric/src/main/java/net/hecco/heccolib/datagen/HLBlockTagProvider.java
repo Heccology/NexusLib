@@ -11,7 +11,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public abstract class HLBlockTagProvider extends FabricTagProvider.BlockTagProvider {
-    public final String MOD_ID;
+
+    private final String MOD_ID;
+
     public HLBlockTagProvider(String modId, FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
         this.MOD_ID = modId;
