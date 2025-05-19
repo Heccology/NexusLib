@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
