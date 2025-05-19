@@ -344,7 +344,6 @@ public class BlockFamilyGenerator {
         if (tint) {
             FOLIAGE_TINTED.add(block);
         }
-
         return this;
     }
 

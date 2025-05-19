@@ -1,12 +1,5 @@
 package net.hecco.heccolib;
 
-import net.hecco.heccolib.lib.blockFamilyGenerator.BlockFamilyGenerator;
-import net.hecco.heccolib.lib.blockFamilyGenerator.OldBlockFamilyGenerator;
-import net.hecco.heccolib.lib.blockFamilyGenerator.MinMiningToolTier;
-import net.hecco.heccolib.lib.blockFamilyGenerator.Mineables;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,11 +1,16 @@
 package net.hecco.heccolib.lib.blockFamilyGenerator;
 
-import net.hecco.heccolib.lib.publicBlocks.PublicStairBlock;
+import net.hecco.heccolib.lib.publicBlocks.*;
 import net.hecco.heccolib.platform.Services;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.WallBlock;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,9 +22,33 @@ public class BlockFamilyCreator {
     public static final Map<String, BlockFamilyCreator> BLOCK_FAMILIES = new HashMap<>();
     public static final Map<String, Supplier<Block>> BLOCKS = new HashMap<>();
 
+    public final Map<Supplier<Block>, Supplier<Block>> VARIANT_TO_BASE_BLOCK = new HashMap<>();
     public final ArrayList<Supplier<Block>> STAIRS = new ArrayList<>();
     public final ArrayList<Supplier<Block>> SLABS = new ArrayList<>();
     public final ArrayList<Supplier<Block>> WALLS = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> FENCES = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> WOODEN_FENCES = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> FENCE_GATES = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> DOORS = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> WOODEN_DOORS = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> TRAPDOORS = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> WOODEN_TRAPDOORS = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> PRESSURE_PLATES = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> WOODEN_PRESSURE_PLATES = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> STONE_PRESSURE_PLATES = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> BUTTONS = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> WOODEN_BUTTONS = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> STONE_BUTTONS = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> LOGS = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> LEAVES = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> FLOWERS = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> SAPLINGS = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> FLOWER_POTS = new ArrayList<>();
+    public final ArrayList<TagKey<Block>> FLAMMABLE_LOG_TAGS = new ArrayList<>();
+    public final ArrayList<TagKey<Block>> LOG_TAGS = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> OVERWORLD_NATURAL_LOGS = new ArrayList<>();
+    public final HashMap<Supplier<Block>, Supplier<Block>> STRIPPABLE = new HashMap<>();
+    public final ArrayList<Supplier<Block>> FOLIAGE_TINTED = new ArrayList<>();
 
     public final ArrayList<Supplier<Block>> CUBE = new ArrayList<>();
     public final ArrayList<Supplier<Block>> STAIRS_MODEL = new ArrayList<>();
@@ -72,27 +101,48 @@ public class BlockFamilyCreator {
             case IRON -> NEEDS_IRON_TOOL.add(registeredBlock);
             case DIAMOND -> NEEDS_DIAMOND_TOOL.add(registeredBlock);
         }
+        if (registeredBlock != currentBlock) {
+            VARIANT_TO_BASE_BLOCK.put(registeredBlock, currentBlock);
+        }
         return registeredBlock;
     }
 
-    public BlockFamilyCreator block(String prefix, String suffix, String name, Mineables mineables, MinMiningToolTier minMiningToolTier, boolean generateModel) {
+    public Supplier<Block> registerBlock(String name, Mineables mineables, MinMiningToolTier minMiningToolTier, Supplier<Block> block) {
+        Supplier<Block> registeredBlock = Services.REGISTRIES.registerBlock(this.modId, name, block);
+        BLOCKS.put(name, registeredBlock);
+        this.blockFamilyBlocks.put(name, registeredBlock);
+        switch (mineables) {
+            case PICKAXE -> PICKAXE_MINEABLE.add(registeredBlock);
+            case AXE -> AXE_MINEABLE.add(registeredBlock);
+            case SHOVEL -> SHOVEL_MINEABLE.add(registeredBlock);
+            case HOE -> HOE_MINEABLE.add(registeredBlock);
+        }
+        switch (minMiningToolTier) {
+            case STONE -> NEEDS_STONE_TOOL.add(registeredBlock);
+            case IRON -> NEEDS_IRON_TOOL.add(registeredBlock);
+            case DIAMOND -> NEEDS_DIAMOND_TOOL.add(registeredBlock);
+        }
+        return registeredBlock;
+    }
+
+    public BlockFamilyCreator block(String prefix, String suffix, String baseBlockId, Mineables mineables, MinMiningToolTier minMiningToolTier, boolean generateModel) {
         this.mineables = mineables;
         this.generateModel = generateModel;
         this.minMiningToolTier = minMiningToolTier;
-        createBlockType(prefix, suffix, name);
+        createBlockType(prefix, suffix, baseBlockId);
         return this;
     }
 
-    public BlockFamilyCreator block(String prefix, String suffix, String name, Mineables mineables, boolean generateModel) {
+    public BlockFamilyCreator block(String prefix, String suffix, String baseBlockId, Mineables mineables, boolean generateModel) {
         this.mineables = mineables;
         this.generateModel = generateModel;
-        createBlockType(prefix, suffix, name);
+        createBlockType(prefix, suffix, baseBlockId);
         return this;
     }
 
-    public BlockFamilyCreator block(String prefix, String suffix, String name, boolean generateModel) {
+    public BlockFamilyCreator block(String prefix, String suffix, String baseBlockId, boolean generateModel) {
         this.generateModel = generateModel;
-        createBlockType(prefix, suffix, name);
+        createBlockType(prefix, suffix, baseBlockId);
         return this;
     }
 
@@ -104,6 +154,12 @@ public class BlockFamilyCreator {
         if (this.generateModel) {
             CUBE.add(block);
         }
+    }
+
+    public BlockFamilyCreator updateAffixes(String prefix, String suffix) {
+        this.prefix = prefix == "" ? "" : prefix + "_";
+        this.suffix = suffix == "" ? "" : "_" + (suffix.substring(suffix.length()-1) == "s" ? suffix.replace(suffix.substring(suffix.length()-1), "") : suffix);
+        return this;
     }
 
 
@@ -130,6 +186,112 @@ public class BlockFamilyCreator {
         WALLS.add(block);
         if (this.generateModel) {
             WALL_MODEL.add(block);
+        }
+        return this;
+    }
+
+    public BlockFamilyCreator fence(boolean wooden) {
+        Supplier<Block> block = registerBlock(name + "_fence", () -> new WallBlock(BlockBehaviour.Properties.of()));
+        if (wooden) {
+            WOODEN_FENCES.add(block);
+        } else {
+            FENCES.add(block);
+        }
+        return this;
+    }
+
+    public BlockFamilyCreator fenceGate(WoodType woodType) {
+        Supplier<Block> block = registerBlock(name + "_fence_gate", () -> new FenceGateBlock(woodType, BlockBehaviour.Properties.of()));
+        FENCE_GATES.add(block);
+
+        return this;
+    }
+
+    public BlockFamilyCreator logs(boolean burnable, boolean overworld) {
+        Supplier<Block> log = registerBlock(name + "_log", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of()));
+
+        Supplier<Block> strippedLog = registerBlock("stripped_" + name + "_log", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of()));
+
+        Supplier<Block> wood = registerBlock(name + "_wood", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of()));
+
+        Supplier<Block> strippedWood = registerBlock("stripped_" + name + "_wood", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of()));
+
+        if (burnable) {
+            FLAMMABLE_LOG_TAGS.add(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(this.modId, this.name + "_logs")));
+        } else {
+            LOG_TAGS.add(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(this.modId, this.name + "_logs")));
+        }
+        if (overworld) {
+            OVERWORLD_NATURAL_LOGS.add(log);
+        }
+        LOGS.add(log);
+        STRIPPABLE.put(wood, strippedWood);
+        STRIPPABLE.put(log, strippedLog);
+
+        return this;
+    }
+
+    public BlockFamilyCreator door(BlockSetType blockSetType, boolean wooden) {
+        Supplier<Block> block = registerBlock(name + "_door", () -> new PublicDoorBlock(blockSetType, BlockBehaviour.Properties.of()));
+        if (wooden) {
+            WOODEN_DOORS.add(block);
+        } else {
+            DOORS.add(block);
+        }
+        return this;
+    }
+
+    public BlockFamilyCreator trapdoor(BlockSetType blockSetType, boolean wooden) {
+        Supplier<Block> block = registerBlock(name + "_trapdoor", () -> new PublicTrapdoorBlock(blockSetType, BlockBehaviour.Properties.of().noOcclusion()));
+        if (wooden) {
+            WOODEN_TRAPDOORS.add(block);
+        } else {
+            TRAPDOORS.add(block);
+        }
+        return this;
+    }
+
+    public BlockFamilyCreator pressurePlate(BlockSetType blockSetType, boolean wooden, boolean stone) {
+        Supplier<Block> block = registerBlock(name + "_pressure_plate", () -> new PublicPressurePlateBlock(blockSetType, BlockBehaviour.Properties.of().forceSolidOn().noCollission().strength(0.5F).pushReaction(PushReaction.DESTROY)));
+        if (wooden) {
+            WOODEN_PRESSURE_PLATES.add(block);
+        } else if (stone) {
+            STONE_PRESSURE_PLATES.add(block);
+        } else {
+            PRESSURE_PLATES.add(block);
+        }
+        return this;
+    }
+
+    public BlockFamilyCreator button(BlockSetType blockSetType, boolean wooden, boolean stone, int pressTicks) {
+        Supplier<Block> block = registerBlock(name + "_button", () -> new PublicButtonBlock(blockSetType, pressTicks, BlockBehaviour.Properties.of().noCollission().strength(0.5F).pushReaction(PushReaction.DESTROY)));
+        if (wooden) {
+            WOODEN_BUTTONS.add(block);
+        } else if (stone) {
+            STONE_BUTTONS.add(block);
+        } else {
+            BUTTONS.add(block);
+        }
+        return this;
+    }
+
+    public BlockFamilyCreator leaves(SoundType sounds, boolean tint) {
+        Supplier<Block> block = registerBlock(name + "_leaves", Mineables.HOE, MinMiningToolTier.NONE, () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).sound(sounds)));
+        LEAVES.add(block);
+        if (tint) {
+            FOLIAGE_TINTED.add(block);
+        }
+        return this;
+    }
+
+    public BlockFamilyCreator leaves(SoundType sounds, MapColor mapColor, String name, boolean flowering, boolean tint) {
+        Supplier<Block> block = registerBlock(name + "_" + this.name + "_leaves", Mineables.HOE, MinMiningToolTier.NONE, () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).sound(sounds).mapColor(mapColor)));
+        LEAVES.add(block);
+        if (flowering) {
+            FLOWERS.add(block);
+        }
+        if (tint) {
+            FOLIAGE_TINTED.add(block);
         }
         return this;
     }
