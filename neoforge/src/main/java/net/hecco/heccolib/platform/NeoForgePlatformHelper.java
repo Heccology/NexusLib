@@ -23,4 +23,9 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
         return !FMLLoader.isProduction();
     }
+
+    @Override
+    public boolean isDatagen() {
+        return false;
+    }
 }
