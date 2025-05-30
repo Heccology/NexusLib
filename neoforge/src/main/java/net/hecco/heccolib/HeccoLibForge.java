@@ -10,7 +10,7 @@ import net.neoforged.fml.common.Mod;
 public class HeccoLibForge {
 
     public HeccoLibForge(IEventBus eventBus) {
-        Services.REGISTRIES = new NeoForgeRegistryHelper(HeccoLib.MOD_ID, eventBus);
+        Services.REGISTRIES = new NeoForgeRegistryHelper(eventBus);
         HeccoLib.init();
     }
 }

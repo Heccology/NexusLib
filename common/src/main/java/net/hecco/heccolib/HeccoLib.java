@@ -18,6 +18,5 @@ public class HeccoLib {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static void init() {
-        Services.REGISTRIES.registerBlock(MOD_ID, "test_block", () -> new Block(BlockBehaviour.Properties.of()));
     }
 }
