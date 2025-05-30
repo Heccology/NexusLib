@@ -1,4 +1,4 @@
-package net.hecco.heccolib.lib.blockFamilyGenerator;
+package net.hecco.heccolib.lib.blockFamilyCreator;
 
 public enum Mineables {
     NONE,

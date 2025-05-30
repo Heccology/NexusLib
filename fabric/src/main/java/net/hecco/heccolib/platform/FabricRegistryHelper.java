@@ -16,9 +16,9 @@ import java.util.function.Supplier;
 public class FabricRegistryHelper implements HLRegistryHelper {
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> Supplier<T> register(String modid, String id, ResourceKey<? extends Registry<T>> registry, Supplier<T> entry) {
         Registry<? extends Registry<?>> registryOfRegistries = BuiltInRegistries.REGISTRY;
-        @SuppressWarnings("unchecked")
         Registry<T> registry1 = (Registry<T>) registryOfRegistries.get(registry.location());
         T registeredEntry = Registry.register(registry1, ResourceLocation.fromNamespaceAndPath(modid, id), entry.get());
         return () -> registeredEntry;

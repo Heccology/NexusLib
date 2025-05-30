@@ -2,7 +2,7 @@ package net.hecco.heccolib.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-import net.hecco.heccolib.lib.blockFamilyGenerator.BlockFamilyCreator;
+import net.hecco.heccolib.lib.blockFamilyCreator.BlockFamilyCreator;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.model.ModelTemplates;

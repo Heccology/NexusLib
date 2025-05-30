@@ -1,4 +1,4 @@
-package net.hecco.heccolib.lib.blockFamilyGenerator;
+package net.hecco.heccolib.lib.blockFamilyCreator;
 
 import net.hecco.heccolib.lib.publicBlocks.*;
 import net.hecco.heccolib.platform.Services;

@@ -28,11 +28,10 @@ public class NeoForgeRegistryHelper implements HLRegistryHelper {
         this.eventBus = null;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public <T> Supplier<T> register(String modid, String id, ResourceKey<? extends Registry<T>> registryKey, Supplier<T> entry) {
         DeferredRegister<T> deferred = (DeferredRegister<T>) genericRegistries.computeIfAbsent(registryKey, key -> {
-            @SuppressWarnings("rawtypes")
             var i = DeferredRegister.create((ResourceKey) key, modid);
             i.register(eventBus);
             return i;
