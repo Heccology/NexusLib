@@ -31,11 +31,13 @@ public class NeoForgeRegistryHelper implements HLRegistryHelper {
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
     public <T> Supplier<T> register(String modid, String id, ResourceKey<? extends Registry<T>> registryKey, Supplier<T> entry) {
-        DeferredRegister<T> deferred = (DeferredRegister<T>) genericRegistries.computeIfAbsent(registryKey, key -> {
-            var i = DeferredRegister.create((ResourceKey) key, modid);
+        DeferredRegister<T> registry;
+        if (!genericRegistries.containsKey(registryKey)) {
+            var i = DeferredRegister.create((ResourceKey) registryKey, modid);
             i.register(eventBus);
-            return i;
-        });
-        return deferred.register(id, entry);
+            genericRegistries.put(registryKey, i);
+        }
+        registry = (DeferredRegister<T>) genericRegistries.get(registryKey);
+        return registry.register(id, entry);
     }
 }
