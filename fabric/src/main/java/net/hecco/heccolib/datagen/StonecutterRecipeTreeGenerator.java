@@ -59,6 +59,12 @@ public class StonecutterRecipeTreeGenerator {
                                 for (Map.Entry<ItemLike, ItemLike> fourthEntry : RECIPES) {
                                     if (fourthEntry.getValue() == thirdEntry.getKey()) {
                                         FabricRecipeProvider.stonecutterResultFromBase(recipeOutput, RecipeCategory.BUILDING_BLOCKS, entry.getValue(), fourthEntry.getKey(), ENTRY_TO_COUNT.get(entry));
+
+                                        for (Map.Entry<ItemLike, ItemLike> fifthEntry : RECIPES) {
+                                            if (fifthEntry.getValue() == fourthEntry.getKey()) {
+                                                FabricRecipeProvider.stonecutterResultFromBase(recipeOutput, RecipeCategory.BUILDING_BLOCKS, entry.getValue(), fifthEntry.getKey(), ENTRY_TO_COUNT.get(entry));
+                                            }
+                                        }
                                     }
                                 }
                             }
