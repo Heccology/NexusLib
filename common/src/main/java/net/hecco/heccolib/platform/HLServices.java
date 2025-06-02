@@ -1,16 +1,19 @@
 package net.hecco.heccolib.platform;
 
 import net.hecco.heccolib.HeccoLib;
+import net.hecco.heccolib.lib.compat.CompatManager;
 import net.hecco.heccolib.platform.services.HLRegistryHelper;
 import net.hecco.heccolib.platform.services.IPlatformHelper;
 
 import java.util.ServiceLoader;
 
-public class Services {
+public class HLServices {
 
-    public static HLRegistryHelper REGISTRIES = load(HLRegistryHelper.class);
+    public static HLRegistryHelper REGISTRY = load(HLRegistryHelper.class);
 
     public static final IPlatformHelper PLATFORM = load(IPlatformHelper.class);
+
+    public static final CompatManager COMPATMANAGER = load(CompatManager.class);
 
     public static <T> T load(Class<T> clazz) {
 

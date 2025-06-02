@@ -1,7 +1,8 @@
 package net.hecco.heccolib.lib.blockFamilyCreator;
 
 import net.hecco.heccolib.lib.publicBlocks.*;
-import net.hecco.heccolib.platform.Services;
+import net.hecco.heccolib.platform.HLServices;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -87,7 +88,7 @@ public class BlockFamilyCreator {
     }
 
     public Supplier<Block> registerBlock(String name, Supplier<Block> block) {
-        Supplier<Block> registeredBlock = Services.REGISTRIES.registerBlock(this.modId, name, block);
+        Supplier<Block> registeredBlock = HLServices.REGISTRY.registerBlock(this.modId, name, block);
         BLOCKS.put(name, registeredBlock);
         this.blockFamilyBlocks.put(name, registeredBlock);
         switch (this.mineables) {
@@ -108,7 +109,7 @@ public class BlockFamilyCreator {
     }
 
     public Supplier<Block> registerBlock(String name, Mineables mineables, MinMiningToolTier minMiningToolTier, Supplier<Block> block) {
-        Supplier<Block> registeredBlock = Services.REGISTRIES.registerBlock(this.modId, name, block);
+        Supplier<Block> registeredBlock = HLServices.REGISTRY.registerBlock(this.modId, name, block);
         BLOCKS.put(name, registeredBlock);
         this.blockFamilyBlocks.put(name, registeredBlock);
         switch (mineables) {
@@ -293,6 +294,34 @@ public class BlockFamilyCreator {
         if (tint) {
             FOLIAGE_TINTED.add(block);
         }
+        return this;
+    }
+
+
+    public BlockFamilyCreator addExistingBlock(Supplier<Block> block) {
+        String i = BuiltInRegistries.BLOCK.getKey(block.get()).getPath();
+        BLOCKS.put(i, block);
+        this.blockFamilyBlocks.put(i, block);
+        VARIANT_TO_BASE_BLOCK.put(block, currentBlock);
+        return this;
+    }
+
+    public BlockFamilyCreator addExistingBlock(Supplier<Block> block, Mineables mineables, MinMiningToolTier minMiningToolTier) {
+        String i = BuiltInRegistries.BLOCK.getKey(block.get()).getPath();
+        BLOCKS.put(i, block);
+        this.blockFamilyBlocks.put(i, block);
+        switch (mineables) {
+            case PICKAXE -> PICKAXE_MINEABLE.add(block);
+            case AXE -> AXE_MINEABLE.add(block);
+            case SHOVEL -> SHOVEL_MINEABLE.add(block);
+            case HOE -> HOE_MINEABLE.add(block);
+        }
+        switch (minMiningToolTier) {
+            case STONE -> NEEDS_STONE_TOOL.add(block);
+            case IRON -> NEEDS_IRON_TOOL.add(block);
+            case DIAMOND -> NEEDS_DIAMOND_TOOL.add(block);
+        }
+        VARIANT_TO_BASE_BLOCK.put(block, currentBlock);
         return this;
     }
 

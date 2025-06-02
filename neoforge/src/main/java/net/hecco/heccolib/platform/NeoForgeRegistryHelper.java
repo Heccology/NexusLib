@@ -2,6 +2,7 @@ package net.hecco.heccolib.platform;
 
 import net.hecco.heccolib.platform.services.HLRegistryHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -45,6 +46,19 @@ public class NeoForgeRegistryHelper implements HLRegistryHelper {
         }
         registry = (DeferredRegister<T>) registries.get(registryKey);
         return registry.register(id, entry);
+    }
+
+    @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public <T> Holder<T> registerHolder(String modId, String id, ResourceKey<? extends Registry<T>> registryKey, T entry) {
+        DeferredRegister<T> registry;
+        if (!registries.containsKey(registryKey)) {
+            var i = DeferredRegister.create((ResourceKey) registryKey, modId);
+            i.register(eventBus);
+            registries.put(registryKey, i);
+        }
+        registry = (DeferredRegister<T>) registries.get(registryKey);
+        return registry.register(id, () -> entry);
     }
 
     @Override

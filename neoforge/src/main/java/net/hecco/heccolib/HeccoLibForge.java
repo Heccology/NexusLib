@@ -2,7 +2,7 @@ package net.hecco.heccolib;
 
 
 import net.hecco.heccolib.platform.NeoForgeRegistryHelper;
-import net.hecco.heccolib.platform.Services;
+import net.hecco.heccolib.platform.HLServices;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 
@@ -10,7 +10,7 @@ import net.neoforged.fml.common.Mod;
 public class HeccoLibForge {
 
     public HeccoLibForge(IEventBus eventBus) {
-        Services.REGISTRIES = new NeoForgeRegistryHelper(eventBus);
+        HLServices.REGISTRY = new NeoForgeRegistryHelper(eventBus);
         HeccoLib.init();
     }
 }

@@ -1,6 +1,7 @@
 package net.hecco.heccolib.platform.services;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
@@ -17,6 +18,8 @@ import java.util.function.Supplier;
 public interface HLRegistryHelper {
 
     <T> Supplier<T> register(String modId, String id, ResourceKey<? extends Registry<T>> registry, Supplier<T> entry);
+
+    <T> Holder<T> registerHolder(String modId, String id, ResourceKey<? extends Registry<T>> registry, T entry);
 
     @SuppressWarnings("unchecked")
     default <T extends Block> Supplier<T> registerBlock(String modid, String id, Supplier<T> block) {

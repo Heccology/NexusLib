@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.hecco.heccolib.HeccoLib;
 import net.hecco.heccolib.platform.services.HLRegistryHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -33,6 +34,17 @@ public class FabricRegistryHelper implements HLRegistryHelper {
         );
         return () -> value;
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> Holder<T> registerHolder(String modId, String id, ResourceKey<? extends Registry<T>> registry, T entry) {
+        return Registry.registerForHolder(
+                (Registry<T>) BuiltInRegistries.REGISTRY.get(registry.location()),
+                ResourceLocation.fromNamespaceAndPath(modId, id),
+                entry
+        );
+    }
+
 
     @SafeVarargs
     @Override
