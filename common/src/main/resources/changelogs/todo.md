@@ -1,5 +1,3 @@
-- add plank block method to creator, for planks block/item tag
 - fix block properties in family creator
-- block loot table datagen, item tag gen
 - auto recipe gen family generator
 - wood set preset?

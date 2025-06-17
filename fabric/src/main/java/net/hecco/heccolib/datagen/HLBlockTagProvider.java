@@ -20,7 +20,7 @@ public abstract class HLBlockTagProvider extends FabricTagProvider.BlockTagProvi
         this.MOD_ID = modId;
     }
 
-    public void generateBlockFamilyTags() {
+    public void generateBlockFamilyBlockTags() {
         for (BlockFamilyCreator blockFamily : BlockFamilyCreator.BLOCK_FAMILIES.values()) {
             if (blockFamily.isOfMod(this.MOD_ID)) {
                 for (Supplier<Block> block : blockFamily.WALLS) {
@@ -52,15 +52,6 @@ public abstract class HLBlockTagProvider extends FabricTagProvider.BlockTagProvi
                 }
                 for (Supplier<Block> block : blockFamily.TRAPDOORS) {
                     getOrCreateTagBuilder(BlockTags.TRAPDOORS).add(block.get());
-                }
-                for (Supplier<Block> block : blockFamily.WOODEN_PRESSURE_PLATES) {
-                    getOrCreateTagBuilder(BlockTags.WOODEN_PRESSURE_PLATES).add(block.get());
-                }
-                for (Supplier<Block> block : blockFamily.STONE_PRESSURE_PLATES) {
-                    getOrCreateTagBuilder(BlockTags.STONE_PRESSURE_PLATES).add(block.get());
-                }
-                for (Supplier<Block> block : blockFamily.PRESSURE_PLATES) {
-                    getOrCreateTagBuilder(BlockTags.PRESSURE_PLATES).add(block.get());
                 }
                 for (Supplier<Block> block : blockFamily.WOODEN_PRESSURE_PLATES) {
                     getOrCreateTagBuilder(BlockTags.WOODEN_PRESSURE_PLATES).add(block.get());

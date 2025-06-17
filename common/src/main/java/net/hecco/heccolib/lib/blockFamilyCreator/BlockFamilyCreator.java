@@ -6,6 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -45,8 +46,11 @@ public class BlockFamilyCreator {
     public final ArrayList<Supplier<Block>> FLOWERS = new ArrayList<>();
     public final ArrayList<Supplier<Block>> SAPLINGS = new ArrayList<>();
     public final ArrayList<Supplier<Block>> FLOWER_POTS = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> PLANKS = new ArrayList<>();
     public final ArrayList<TagKey<Block>> FLAMMABLE_LOG_TAGS = new ArrayList<>();
+    public final ArrayList<TagKey<Item>> FLAMMABLE_LOG_ITEM_TAGS = new ArrayList<>();
     public final ArrayList<TagKey<Block>> LOG_TAGS = new ArrayList<>();
+    public final ArrayList<TagKey<Item>> LOG_ITEM_TAGS = new ArrayList<>();
     public final ArrayList<Supplier<Block>> OVERWORLD_NATURAL_LOGS = new ArrayList<>();
     public final HashMap<Supplier<Block>, Supplier<Block>> STRIPPABLE = new HashMap<>();
     public final ArrayList<Supplier<Block>> FOLIAGE_TINTED = new ArrayList<>();
@@ -147,7 +151,15 @@ public class BlockFamilyCreator {
         return this;
     }
 
-    private void createBlockType(String prefix, String suffix, String name) {
+    public BlockFamilyCreator planks() {
+        this.generateModel = true;
+        Supplier<Block> block =createBlockType("", "planks", this.name);
+        updateAffixes("", "");
+        this.PLANKS.add(block);
+        return this;
+    }
+
+    private Supplier<Block> createBlockType(String prefix, String suffix, String name) {
         Supplier<Block> block = registerBlock((prefix != "" ? prefix + "_" : "") + name + (suffix != "" ? "_" + suffix : ""), () -> new Block(BlockBehaviour.Properties.of()));
         this.prefix = prefix == "" ? "" : prefix + "_";
         this.suffix = suffix == "" ? "" : "_" + (suffix.substring(suffix.length() - 1) == "s" ? suffix.replace(suffix.substring(suffix.length()-1), "") : suffix);
@@ -155,6 +167,7 @@ public class BlockFamilyCreator {
         if (this.generateModel) {
             CUBE.add(block);
         }
+        return block;
     }
 
     public BlockFamilyCreator updateAffixes(String prefix, String suffix) {
@@ -219,8 +232,10 @@ public class BlockFamilyCreator {
 
         if (burnable) {
             FLAMMABLE_LOG_TAGS.add(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(this.modId, this.name + "_logs")));
+            FLAMMABLE_LOG_ITEM_TAGS.add(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(this.modId, this.name + "_logs")));
         } else {
             LOG_TAGS.add(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(this.modId, this.name + "_logs")));
+            LOG_ITEM_TAGS.add(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(this.modId, this.name + "_logs")));
         }
         if (overworld) {
             OVERWORLD_NATURAL_LOGS.add(log);
