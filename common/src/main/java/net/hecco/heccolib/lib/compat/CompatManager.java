@@ -16,9 +16,5 @@ public abstract class CompatManager {
         MODULES.add(module);
     }
 
-    public void registerCompatContent() {
-        for (CompatModule module : MODULES) {
-
-        }
-    }
+    public abstract void registerCompatContent();
 }

@@ -46,8 +46,8 @@ public abstract class HLModelProvider extends FabricModelProvider {
                         wall(blockStateModelGenerator, block.get(), blockFamily.VARIANT_TO_BASE_BLOCK.get(block).get());
                     }
                 }
-                for (Object block : ArrayUtils.addAll(blockFamily.WOODEN_FENCES.toArray(), blockFamily.FENCES.toArray())) {
-                    fence(blockStateModelGenerator, (Block) block, blockFamily.VARIANT_TO_BASE_BLOCK.get((Block) block).get());
+                for (Supplier<Block> block : Stream.concat(blockFamily.WOODEN_FENCES.stream(), blockFamily.FENCES.stream()).toList()) {
+                    fence(blockStateModelGenerator, block.get(), blockFamily.VARIANT_TO_BASE_BLOCK.get(block).get());
                 }
                 for (Supplier<Block> block : blockFamily.FENCE_GATES) {
                     fenceGate(blockStateModelGenerator, block.get(), blockFamily.VARIANT_TO_BASE_BLOCK.get(block).get());
@@ -55,11 +55,11 @@ public abstract class HLModelProvider extends FabricModelProvider {
                 for (Supplier<Block> block : blockFamily.LOGS) {
                     blockStateModelGenerator.woodProvider(block.get()).log(block.get()).wood(blockFamily.getBlock(BuiltInRegistries.BLOCK.getKey(block.get()).getPath().replace("log", "wood")).get());
                 }
-                for (Object block : ArrayUtils.addAll(blockFamily.WOODEN_DOORS.toArray(), blockFamily.DOORS.toArray())) {
-                    blockStateModelGenerator.createDoor((Block) block);
+                for (Supplier<Block> block : Stream.concat(blockFamily.WOODEN_DOORS.stream(), blockFamily.DOORS.stream()).toList()) {
+                    blockStateModelGenerator.createDoor(block.get());
                 }
-                for (Object block : ArrayUtils.addAll(blockFamily.WOODEN_TRAPDOORS.toArray(), blockFamily.TRAPDOORS.toArray())) {
-                    blockStateModelGenerator.createOrientableTrapdoor((Block) block);
+                for (Supplier<Block> block : Stream.concat(blockFamily.WOODEN_TRAPDOORS.stream(), blockFamily.TRAPDOORS.stream()).toList()) {
+                    blockStateModelGenerator.createOrientableTrapdoor(block.get());
                 }
                 for (Supplier<Block> block : Stream.concat(Stream.concat(blockFamily.WOODEN_PRESSURE_PLATES.stream(), blockFamily.STONE_PRESSURE_PLATES.stream()), blockFamily.PRESSURE_PLATES.stream()).toList()) {
                     pressurePlate(blockStateModelGenerator, block.get(), blockFamily.VARIANT_TO_BASE_BLOCK.get(block).get());
@@ -71,10 +71,10 @@ public abstract class HLModelProvider extends FabricModelProvider {
                     blockStateModelGenerator.createTrivialBlock(block.get(), TexturedModel.LEAVES);
                 }
                 for (Supplier<Block> block : blockFamily.FLOWER_POTS) {
-                    blockStateModelGenerator.createPlant(((FlowerPotBlock) block).getPotted(), block.get(), BlockModelGenerators.TintState.NOT_TINTED);
+                    blockStateModelGenerator.createPlant(((FlowerPotBlock) block.get()).getPotted(), block.get(), BlockModelGenerators.TintState.NOT_TINTED);
                 }
             }
-            }
+        }
     }
 
     private void stairs(BlockModelGenerators blockStateModelGenerator, Block block, Block baseBlock) {

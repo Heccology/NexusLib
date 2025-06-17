@@ -192,7 +192,7 @@ public class BlockFamilyCreator {
     }
 
     public BlockFamilyCreator fence(boolean wooden) {
-        Supplier<Block> block = registerBlock(name + "_fence", () -> new WallBlock(BlockBehaviour.Properties.of()));
+        Supplier<Block> block = registerBlock(name + "_fence", () -> new FenceBlock(BlockBehaviour.Properties.of()));
         if (wooden) {
             WOODEN_FENCES.add(block);
         } else {

@@ -1,6 +1,5 @@
 package net.hecco.heccolib.lib.compat;
 
-import com.jcraft.jorbis.Block;
 import net.hecco.heccolib.lib.compat.compatBlocks.CompatBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
