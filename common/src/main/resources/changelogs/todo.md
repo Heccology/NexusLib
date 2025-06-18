@@ -1,3 +1,2 @@
-- fix block properties in family creator
 - auto recipe gen family generator
 - wood set preset?
