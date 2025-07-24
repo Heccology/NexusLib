@@ -1,6 +1,7 @@
 package net.hecco.heccolib;
 
 
+import net.hecco.heccolib.platform.NeoForgeClientHelper;
 import net.hecco.heccolib.platform.NeoForgeRegistryHelper;
 import net.hecco.heccolib.platform.HLServices;
 import net.neoforged.bus.api.IEventBus;
@@ -15,6 +16,7 @@ public class HeccoLibForge {
         IEventBus modEventBus = ModLoadingContext.get().getActiveContainer().getEventBus();
 
         HLServices.REGISTRY = new NeoForgeRegistryHelper(modEventBus);
+        HLServices.CLIENT = new NeoForgeClientHelper(modEventBus);
 
         if (modEventBus != null) {
             modEventBus.addListener(this::onCommonSetup);

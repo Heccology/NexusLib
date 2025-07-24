@@ -54,6 +54,7 @@ public abstract class HLModelProvider extends FabricModelProvider {
                 }
                 for (Supplier<Block> block : blockFamily.LOGS) {
                     blockStateModelGenerator.woodProvider(block.get()).log(block.get()).wood(blockFamily.getBlock(BuiltInRegistries.BLOCK.getKey(block.get()).getPath().replace("log", "wood")).get());
+                    blockStateModelGenerator.woodProvider(blockFamily.STRIPPABLE.get(block).get()).log(blockFamily.STRIPPABLE.get(block).get()).wood(blockFamily.STRIPPABLE.get(blockFamily.getBlock(BuiltInRegistries.BLOCK.getKey(block.get()).getPath().replace("log", "wood"))).get());
                 }
                 for (Supplier<Block> block : Stream.concat(blockFamily.WOODEN_DOORS.stream(), blockFamily.DOORS.stream()).toList()) {
                     blockStateModelGenerator.createDoor(block.get());

@@ -24,7 +24,7 @@ public abstract class HLLanguageProvider extends FabricLanguageProvider {
 
     Set<String> usedTranslationKeys = new HashSet<>();
 
-    private void generate(TranslationBuilder translationBuilder, String key, String translation) {
+    public void generate(TranslationBuilder translationBuilder, String key, String translation) {
         if(usedTranslationKeys.contains(key)) {
             return;
         }
@@ -32,11 +32,11 @@ public abstract class HLLanguageProvider extends FabricLanguageProvider {
         usedTranslationKeys.add(key);
     }
 
-    private void generate(TranslationBuilder translationBuilder, Block block, String translation) {
+    public void generate(TranslationBuilder translationBuilder, Block block, String translation) {
         generate(translationBuilder, block.getDescriptionId(), translation);
     }
 
-    private void generate(TranslationBuilder translationBuilder, Item item, String translation) {
+    public void generate(TranslationBuilder translationBuilder, Item item, String translation) {
         generate(translationBuilder, item.getDescriptionId(), translation);
     }
 

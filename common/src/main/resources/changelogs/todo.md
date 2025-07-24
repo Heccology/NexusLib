@@ -1,2 +1,3 @@
 - auto recipe gen family generator
 - wood set preset?
+- fix door drops block family generator
