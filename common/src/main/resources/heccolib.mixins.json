@@ -4,7 +4,10 @@
   "package": "net.hecco.heccolib.mixin",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_18",
-  "mixins": [],
+  "mixins": [
+    "AbstractFurnaceBlockEntityMixin",
+    "FireBlockSetFlammableInvoker"
+  ],
   "client": [
     "AbstractClientPlayerMixin"
   ],

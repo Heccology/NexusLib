@@ -29,4 +29,15 @@ public class HLServices {
         HeccoLib.LOGGER.debug("Loaded {} for service {}", loadedService, clazz);
         return loadedService;
     }
+
+    public static <T> T loadClient(Class<T> clazz) {
+        if () {
+            final T loadedService = ServiceLoader.load(clazz)
+                    .findFirst()
+                    .orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));
+            HeccoLib.LOGGER.debug("Loaded {} for service {}", loadedService, clazz);
+            return loadedService;
+        }
+        return null;
+    }
 }
