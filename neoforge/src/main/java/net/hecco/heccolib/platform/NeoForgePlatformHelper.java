@@ -2,6 +2,7 @@ package net.hecco.heccolib.platform;
 
 import net.hecco.heccolib.platform.services.IPlatformHelper;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.loading.FMLLoader;
 
 public class NeoForgePlatformHelper implements IPlatformHelper {
@@ -27,5 +28,10 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     @Override
     public boolean isDatagen() {
         return false;
+    }
+
+    @Override
+    public boolean isClientSide() {
+        return FMLEnvironment.dist.isClient();
     }
 }

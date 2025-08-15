@@ -1,5 +1,6 @@
 package net.hecco.heccolib.platform;
 
+import net.fabricmc.api.EnvType;
 import net.hecco.heccolib.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -30,5 +31,10 @@ public class FabricPlatformHelper implements IPlatformHelper {
         } catch (ClassNotFoundException e) {
             return false;
         }
+    }
+
+    @Override
+    public boolean isClientSide() {
+        return FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
     }
 }
