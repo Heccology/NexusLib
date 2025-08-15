@@ -1,5 +1,7 @@
 package net.hecco.heccolib;
 
+import net.hecco.heccolib.lib.strippable.HLStrippableRegistry;
+import net.minecraft.world.level.block.Blocks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
