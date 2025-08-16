@@ -7,7 +7,8 @@
   "mixins": [
     "AbstractFurnaceBlockEntityMixin",
     "AxeItemMixin",
-    "FireBlockSetFlammableInvoker"
+    "FireBlockSetFlammableInvoker",
+    "ShovelItemMixin"
   ],
   "client": [
     "AbstractClientPlayerMixin"
