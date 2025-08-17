@@ -1,7 +1,7 @@
 package net.hecco.heccolib.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.hecco.heccolib.lib.pathable.HLPathableRegistry;
+import net.hecco.heccolib.lib.toolAction.HLToolActions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.context.UseOnContext;
@@ -26,7 +26,7 @@ public class ShovelItemMixin {
             BlockState blockstate = level.getBlockState(blockpos);
             Block block = blockstate.getBlock();
 
-            Map<Block, BlockState> PATHS_2 = HLPathableRegistry.getPathables();
+            Map<Block, BlockState> PATHS_2 = HLToolActions.getPathables();
             Optional<BlockState> possibleState = Optional.ofNullable(PATHS_2.get(block));
 
             if (possibleState.isPresent()) return possibleState.get();
