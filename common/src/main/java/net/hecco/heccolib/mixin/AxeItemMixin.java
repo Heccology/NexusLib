@@ -1,7 +1,7 @@
 package net.hecco.heccolib.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.hecco.heccolib.lib.strippable.HLStrippableRegistry;
+import net.hecco.heccolib.lib.toolAction.HLToolActions;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
@@ -19,7 +19,7 @@ public class AxeItemMixin {
     @ModifyVariable(method = "evaluateNewBlockState", at = @At("STORE"), ordinal = 0)
     private Optional<BlockState> tryWrapWithHLBlocks(Optional<BlockState> value, @Local(argsOnly = true) BlockState state) {
         if (value.isEmpty()) {
-            Map<Block, Block> STRIPS_2 = HLStrippableRegistry.getStrippables();
+            Map<Block, Block> STRIPS_2 = HLToolActions.getStrippables();
 
             Optional<BlockState> stripgrab = Optional.ofNullable(STRIPS_2.get(state.getBlock())).map((block) -> {
                 return block.defaultBlockState().setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS));
