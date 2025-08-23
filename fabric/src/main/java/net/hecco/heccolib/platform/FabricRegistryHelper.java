@@ -60,6 +60,26 @@ public class FabricRegistryHelper implements HLRegistryHelper {
     }
 
     @Override
+    public <T extends Block> Supplier<T> registerBlockNoItem(String modid, String id, Supplier<T> block) {
+        T value = Registry.register(
+                BuiltInRegistries.BLOCK,
+                ResourceLocation.fromNamespaceAndPath(modid, id),
+                block.get()
+        );
+        return () -> value;
+    }
+
+    @Override
+    public <T extends Item> Supplier<T> registerItem(String modid, String id, Supplier<T> item) {
+        T value = Registry.register(
+                BuiltInRegistries.ITEM,
+                ResourceLocation.fromNamespaceAndPath(modid, id),
+                item.get()
+        );
+        return () -> value;
+    }
+
+    @Override
     public <T extends BlockEntity> Supplier<BlockEntityType<T>> registerBlockEntityType(String modid, String id, Supplier<BlockEntityType<T>> supplier) {
         BlockEntityType<T> register = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(modid, id), supplier.get());
         return () -> register;

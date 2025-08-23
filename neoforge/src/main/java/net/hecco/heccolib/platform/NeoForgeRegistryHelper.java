@@ -15,6 +15,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -68,6 +69,30 @@ public class NeoForgeRegistryHelper implements HLRegistryHelper {
         registry = (DeferredRegister<T>) registries.get(registry1.key());
         var register = registry.register(id, holder);
         return register;
+    }
+
+    @Override
+    public <T extends Block> Supplier<T> registerBlockNoItem(String modId, String id, Supplier<T> block) {
+        var registryKey = Registries.BLOCK;
+        if (!registries.containsKey(registryKey)) {
+            var i = DeferredRegister.create((ResourceKey) registryKey, modId);
+            i.register(eventBus);
+            registries.put(registryKey, i);
+        }
+        var registry = (DeferredRegister<T>) registries.get(registryKey);
+        return registry.register(id, block);
+    }
+
+    @Override
+    public <T extends Item> Supplier<T> registerItem(String modId, String id, Supplier<T> item) {
+        var registryKey = Registries.ITEM;
+        if (!registries.containsKey(registryKey)) {
+            var i = DeferredRegister.create((ResourceKey) registryKey, modId);
+            i.register(eventBus);
+            registries.put(registryKey, i);
+        }
+        var registry = (DeferredRegister<T>) registries.get(registryKey);
+        return registry.register(id, item);
     }
 
     @Override
