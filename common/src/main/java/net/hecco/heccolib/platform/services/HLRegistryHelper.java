@@ -42,21 +42,29 @@ public interface HLRegistryHelper {
 
     <T> Holder<T> registerForHolder(String modid, String id, Registry<T> registry, Supplier<T> holder);
 
+    @SuppressWarnings("unchecked")
     default <T extends Block> Supplier<T> registerBlock(String modid, String id, Supplier<T> block) {
-        Supplier<T> registeredBlock = registerBlockNoItem(modid, id, block);
-        registerItem(modid, id, () -> new BlockItem(registeredBlock.get(), new Item.Properties()));
+        Supplier<T> registeredBlock = register(modid, id, (Registry<T>) BuiltInRegistries.BLOCK, block);
+        register(modid, id, BuiltInRegistries.ITEM, () -> new BlockItem(registeredBlock.get(), new Item.Properties()));
         return registeredBlock;
     }
 
-    <T extends Block> Supplier<T> registerBlockNoItem(String modid, String id, Supplier<T> block);
+    @SuppressWarnings("unchecked")
+    default <T extends Block> Supplier<T> registerBlockNoItem(String modid, String id, Supplier<T> block) {
+        return register(modid, id, (Registry<T>) BuiltInRegistries.BLOCK, block);
+    }
 
+    @SuppressWarnings("unchecked")
     default <T extends Block> Supplier<T> registerBlock(String modid, String id, Supplier<T> block, Item.Properties itemProperties) {
-        Supplier<T> registeredBlock = registerBlockNoItem(modid, id, block);
-        registerItem(modid, id, () -> new BlockItem(registeredBlock.get(), itemProperties));
+        Supplier<T> registeredBlock = register(modid, id, (Registry<T>) BuiltInRegistries.BLOCK, block);
+        register(modid, id, BuiltInRegistries.ITEM, () -> new BlockItem(registeredBlock.get(), itemProperties));
         return registeredBlock;
     }
 
-    <T extends Item> Supplier<T> registerItem(String modid, String id, Supplier<T> item);
+    @SuppressWarnings("unchecked")
+    default <T extends Item> Supplier<T> registerItem(String modid, String id, Supplier<T> item) {
+        return register(modid, id, (Registry<T>) BuiltInRegistries.ITEM, item);
+    }
 
     <T extends BlockEntity> Supplier<BlockEntityType<T>> registerBlockEntityType(String modid, String id, Supplier<BlockEntityType<T>> supplier);
 
