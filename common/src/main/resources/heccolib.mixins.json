@@ -12,7 +12,8 @@
     "ShovelItemMixin"
   ],
   "client": [
-    "AbstractClientPlayerMixin"
+    "AbstractClientPlayerMixin",
+    "TerrainParticleMixin"
   ],
   "server": [],
   "injectors": {

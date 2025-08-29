@@ -17,9 +17,6 @@ public class AbstractFurnaceBlockEntityMixin {
     @Inject(method = "getFuel", at = @At("RETURN"), cancellable = true)
     private static void heccolib$getFuel(CallbackInfoReturnable<Map<Item, Integer>> cir) {
         Map<Item, Integer> newMap = new HashMap<>();
-        HeccoLib.LOGGER.info("heccolib is cool");
-        HeccoLib.LOGGER.info(cir.getReturnValue().toString());
-        HeccoLib.LOGGER.info(HLFuelRegistry.getFuels().toString());
         if (cir.getReturnValue() != null) {
             newMap.putAll(cir.getReturnValue());
         }
