@@ -1,20 +1,30 @@
 package net.hecco.heccolib.lib.compat;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.world.flag.FeatureElement;
 
-public abstract class CompatManager {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
+
+public class CompatManager {
 
     protected final String modId;
-    protected final List<CompatModule> MODULES = new ArrayList<>();
+    protected final List<ModIntegration> INTEGRATIONS = new ArrayList<>();
+    protected final Map<Supplier<?>, ModIntegration> CONTENT = new HashMap<>();
 
-    public CompatManager(String modId) {
+    protected CompatManager(String modId) {
         this.modId = modId;
     }
 
-    public void addModule(CompatModule module) {
-        MODULES.add(module);
+    public void addIntegration(ModIntegration module) {
+        INTEGRATIONS.add(module);
     }
 
-    public abstract void registerCompatContent();
+    public void registerCompatContent() {
+        for (ModIntegration integration : INTEGRATIONS) {
+            integration.registerContent();
+        }
+    }
 }

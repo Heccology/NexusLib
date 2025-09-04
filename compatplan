@@ -1,0 +1,4 @@
+compatmanager, created per mod
+call registercompatcontent per mod in common setup
+
+mixin into isEnabled

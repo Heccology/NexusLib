@@ -17,8 +17,6 @@ public class HLServices {
 
     public static HLNetworkingHelper NETWORK = load(HLNetworkingHelper.class);
 
-    public static final CompatManager COMPATMANAGER = load(CompatManager.class);
-
     public static HLClientHelper client() {
         if (!PLATFORM.isClientSide()) {
             throw new IllegalStateException("Client helper requested on server!");
