@@ -10,4 +10,9 @@ public class NeoForgeNetworkingHelper implements HLNetworkingHelper {
     public void sendToPlayer(ServerPlayer player, CustomPacketPayload payload) {
         PacketDistributor.sendToPlayer(player, payload);
     }
+
+    @Override
+    public void sentToServer(CustomPacketPayload payload) {
+        PacketDistributor.sendToServer(payload);
+    }
 }

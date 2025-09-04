@@ -14,4 +14,6 @@ public interface HLNetworkingHelper {
             sendToPlayer(targeter, payload);
         }
     }
+
+    void sentToServer(CustomPacketPayload payload);
 }
