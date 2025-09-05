@@ -6,23 +6,23 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
-public abstract class ModIntegration {
+public interface ModIntegration {
 
-    abstract CompatManager getCompatManager();
+    CompatManager getCompatManager();
 
-    abstract List<String> modIds();
+    List<String> modIds();
 
-    abstract void registerContent();
+    void registerContent();
 
-    public Supplier<?> registerContent(Supplier<?> content) {
+    default Supplier<?> registerContent(Supplier<?> content) {
         getCompatManager().CONTENT.put(content, this);
         return content;
     }
 
-    public boolean shouldCreateDatapack() {return false;}
+    default boolean shouldCreateDatapack() {return false;}
 
     @Nullable
-    public String getDatapackName() {return null;}
+    default String getDatapackName() {return null;}
 
-    public void recipeGeneration(RecipeOutput output) {}
+    default void recipeGeneration(RecipeOutput output) {}
 }

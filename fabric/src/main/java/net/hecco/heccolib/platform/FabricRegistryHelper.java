@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.hecco.heccolib.HeccoLib;
 import net.hecco.heccolib.platform.services.HLRegistryHelper;
 import net.minecraft.core.BlockPos;
@@ -33,10 +34,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import oshi.util.tuples.Pair;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -123,12 +121,15 @@ public class FabricRegistryHelper implements HLRegistryHelper {
 
     @Override
     public void registerBuiltInDatapack(String modId, String packId, String displayName) {
-        ResourceManagerHelper.registerBuiltinResourcePack(
-                ResourceLocation.fromNamespaceAndPath(modId, packId + "_dat"),
-                FabricLoader.getInstance().getModContainer(modId).get(),
-                Component.literal(displayName),
-                ResourcePackActivationType.ALWAYS_ENABLED
-        );
+        Optional<ModContainer> container = FabricLoader.getInstance().getModContainer(modId);
+        if (container.isPresent()) {
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    ResourceLocation.fromNamespaceAndPath(modId, packId),
+                    container.get(),
+                    Component.literal(displayName),
+                    ResourcePackActivationType.ALWAYS_ENABLED
+            );
+        }
     }
 
 

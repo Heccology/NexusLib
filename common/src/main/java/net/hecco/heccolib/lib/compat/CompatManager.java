@@ -30,7 +30,7 @@ public class CompatManager {
     public void registerCompatContent() {
         for (ModIntegration integration : INTEGRATIONS) {
             integration.registerContent();
-            if (integration.shouldCreateDatapack()) {
+            if (integration.shouldCreateDatapack() && integration.modIds().stream().allMatch(HLServices.PLATFORM::isModLoaded)) {
                 if (integration.modIds().isEmpty()) {
                     HeccoLib.LOGGER.error("Cannot create datapack with no mod ids for integration " + integration);
                     continue;
