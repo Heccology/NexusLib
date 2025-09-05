@@ -25,6 +25,10 @@ public class HLCompatAPI {
         return manager;
     }
 
+    public static Map<String, CompatManager> getManagers() {
+        return MANAGERS;
+    }
+
     public static boolean check(FeatureElement element) {
         for (CompatManager manager : MANAGERS.values()) {
             for (Map.Entry<Supplier<?>, ModIntegration> entry : manager.CONTENT.entrySet()) {

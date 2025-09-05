@@ -1,15 +1,26 @@
 package net.hecco.heccolib.platform;
 
 import net.hecco.heccolib.platform.services.HLRegistryHelper;
+import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackLocationInfo;
+import net.minecraft.server.packs.PackSelectionConfig;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.PathPackResources;
+import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackCompatibility;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -24,15 +35,15 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import oshi.util.tuples.Pair;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.file.Path;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
@@ -175,5 +186,20 @@ public class NeoForgeRegistryHelper implements HLRegistryHelper {
 
     @Override
     public void addItemsToItemGroup(ResourceKey<CreativeModeTab> tab, ArrayList<Pair<ItemLike, ItemStack>> items) {
+    }
+
+    @Override
+    public void registerBuiltInDatapack(String modId, String packId, String displayName) {
+        this.eventBus.addListener((AddPackFindersEvent event) -> {
+            if (event.getPackType() == PackType.SERVER_DATA) {
+                Path path = ModList.get().getModFileById(modId).getFile().findResource("resourcepacks/" + packId);
+                event.addRepositorySource(source -> source.accept(new Pack(
+                        new PackLocationInfo(modId + ":" + packId, Component.literal(displayName), PackSource.BUILT_IN, Optional.empty()),
+                        new PathPackResources.PathResourcesSupplier(path),
+                        new Pack.Metadata(Component.empty(), PackCompatibility.COMPATIBLE, FeatureFlagSet.of(), List.of(), true),
+                        new PackSelectionConfig(true, Pack.Position.TOP, false)
+                )));
+            }
+        });
     }
 }

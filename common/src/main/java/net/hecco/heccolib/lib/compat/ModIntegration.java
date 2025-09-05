@@ -1,20 +1,28 @@
 package net.hecco.heccolib.lib.compat;
 
-import net.minecraft.world.flag.FeatureElement;
+import net.minecraft.data.recipes.RecipeOutput;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Supplier;
 
-public interface ModIntegration {
+public abstract class ModIntegration {
 
-    CompatManager compatManager();
+    abstract CompatManager getCompatManager();
 
-    List<String> modIds();
+    abstract List<String> modIds();
 
-    void registerContent();
+    abstract void registerContent();
 
-    default Supplier<?> registerContent(Supplier<?> content) {
-        compatManager().CONTENT.put(content, this);
+    public Supplier<?> registerContent(Supplier<?> content) {
+        getCompatManager().CONTENT.put(content, this);
         return content;
     }
+
+    public boolean shouldCreateDatapack() {return false;}
+
+    @Nullable
+    public String getDatapackName() {return null;}
+
+    public void recipeGeneration(RecipeOutput output) {}
 }

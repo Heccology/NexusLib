@@ -105,4 +105,6 @@ public interface HLRegistryHelper {
     }
 
     void addItemsToItemGroup(ResourceKey<CreativeModeTab> tab, ArrayList<Pair<ItemLike, ItemStack>> items);
+
+    void registerBuiltInDatapack(String modId, String packId, String displayName);
 }

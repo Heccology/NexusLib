@@ -3,6 +3,9 @@ package net.hecco.heccolib.platform;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.hecco.heccolib.HeccoLib;
 import net.hecco.heccolib.platform.services.HLRegistryHelper;
 import net.minecraft.core.BlockPos;
@@ -12,6 +15,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -115,6 +119,16 @@ public class FabricRegistryHelper implements HLRegistryHelper {
                         entries.addAfter(entry.getA(), entry.getB());
                     }
                 });
+    }
+
+    @Override
+    public void registerBuiltInDatapack(String modId, String packId, String displayName) {
+        ResourceManagerHelper.registerBuiltinResourcePack(
+                ResourceLocation.fromNamespaceAndPath(modId, packId + "_dat"),
+                FabricLoader.getInstance().getModContainer(modId).get(),
+                Component.literal(displayName),
+                ResourcePackActivationType.ALWAYS_ENABLED
+        );
     }
 
 

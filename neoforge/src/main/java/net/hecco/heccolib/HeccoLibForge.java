@@ -17,7 +17,7 @@ public class HeccoLibForge {
     public HeccoLibForge() {
         IEventBus modEventBus = ModLoadingContext.get().getActiveContainer().getEventBus();
 
-        HLServices.REGISTRY = new NeoForgeRegistryHelper(modEventBus);
+//        HLServices.REGISTRY = new NeoForgeRegistryHelper(modEventBus);
 //        HLServices.CLIENT = new NeoForgeClientHelper(modEventBus);
 
         if (modEventBus != null) {
