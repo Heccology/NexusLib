@@ -26,10 +26,10 @@ public abstract class AbstractClientPlayerMixin extends Player {
     @Unique
     private static final Map<String, String> heccolib$CAPES = Map.ofEntries(
             Map.entry("bc56b2c8-9ef8-4532-b045-00f44804bca4", "heccolib"), //TheHecco
-            Map.entry("1cedf927-5c8f-4650-95e9-808fc8f94d00", "bountifulfares"), //Yirmiri
-            Map.entry("774e37fc-1ca4-4156-827e-661afa24cb56", "bountifulfares"), //_Artyrian
+            Map.entry("1cedf927-5c8f-4650-95e9-808fc8f94d00", "bountifulfares_super"), //Yirmiri
+            Map.entry("774e37fc-1ca4-4156-827e-661afa24cb56", "bountifulfares_super"), //_Artyrian
             Map.entry("d1dac9fe-3ef0-4ea8-997b-b7cdd6a92131", "bountifulfares"), //tellio_ari
-            Map.entry("32290fa8-77ed-4794-9cba-25c09e7f4e1d", "bountifulfares"), //Diemond_Player
+            Map.entry("32290fa8-77ed-4794-9cba-25c09e7f4e1d", "bountifulfares_super"), //Diemond_Player
             Map.entry("385f22c1-4661-4982-b024-80996b0edbc5", "bountifulfares"), //WorkGoblin
             Map.entry("9778ff53-d83d-4233-8fa6-8aab7b89c4c0", "bountifulfares"), //Stellari_
             Map.entry("64f0361c-a7a8-43ec-83c4-378f8e28702c", "bountifulfares"), //wool___
