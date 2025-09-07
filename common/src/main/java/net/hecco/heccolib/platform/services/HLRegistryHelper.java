@@ -8,6 +8,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Inventory;
@@ -78,6 +79,8 @@ public interface HLRegistryHelper {
 
     <T extends EntityType<?>> Supplier<T> registerEntityType(String modid, String id, Supplier<T> supplier);
 
+    Holder<SoundEvent> registerSoundReference(String modId, String id);
+
     <T> Supplier<DataComponentType<T>> registerComponentType(String modId, String name, UnaryOperator<DataComponentType.Builder<T>> builder);
 
     Supplier<SimpleParticleType> registerParticleType(String modid, String id);
@@ -106,5 +109,7 @@ public interface HLRegistryHelper {
 
     void addItemsToItemGroup(ResourceKey<CreativeModeTab> tab, ArrayList<Pair<ItemLike, ItemStack>> items);
 
-    void registerBuiltInDatapack(String modId, String packId, String displayName);
+    void registerBuiltInResourcepack(String modId, String packId, String displayName, boolean required, boolean enabledByDefault);
+
+    void registerBuiltInDatapack(String modId, String packId, String displayName, boolean required, boolean enabledByDefault);
 }

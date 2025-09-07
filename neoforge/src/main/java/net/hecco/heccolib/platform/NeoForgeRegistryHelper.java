@@ -19,6 +19,7 @@ import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackCompatibility;
 import net.minecraft.server.packs.repository.PackSource;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.flag.FeatureFlags;
@@ -50,14 +51,13 @@ import java.util.function.UnaryOperator;
 
 public class NeoForgeRegistryHelper implements HLRegistryHelper {
     private final Map<ResourceKey<? extends Registry<?>>, DeferredRegister<?>> registries = new HashMap<>();
-    private final IEventBus eventBus;
+    private IEventBus eventBus = ModLoadingContext.get().getActiveContainer().getEventBus();
 
     public NeoForgeRegistryHelper(IEventBus eventBus) {
         this.eventBus = eventBus;
     }
 
     public NeoForgeRegistryHelper() {
-        this.eventBus = ModLoadingContext.get().getActiveContainer().getEventBus();
     }
 
     @Override
@@ -111,6 +111,20 @@ public class NeoForgeRegistryHelper implements HLRegistryHelper {
         registry = (DeferredRegister<T>) registries.get(Registries.ENTITY_TYPE);
         registry.register(id, supplier);
         return () -> (T) BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.fromNamespaceAndPath(modId, id));
+    }
+
+    @Override
+    @SuppressWarnings({"unchecked"})
+    public Holder<SoundEvent> registerSoundReference(String modId, String id) {
+        DeferredRegister<SoundEvent> registry;
+        if (!registries.containsKey(Registries.SOUND_EVENT)) {
+            var i = DeferredRegister.create((ResourceKey) Registries.SOUND_EVENT, modId);
+            i.register(eventBus);
+            registries.put(Registries.SOUND_EVENT, i);
+        }
+        registry = (DeferredRegister<SoundEvent>) registries.get(Registries.SOUND_EVENT);
+        var register = registry.register(id, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(modId, id)));
+        return register;
     }
 
     @Override
@@ -189,15 +203,30 @@ public class NeoForgeRegistryHelper implements HLRegistryHelper {
     }
 
     @Override
-    public void registerBuiltInDatapack(String modId, String packId, String displayName) {
+    public void registerBuiltInResourcepack(String modId, String packId, String displayName, boolean required, boolean enabledByDefault) {
+        this.eventBus.addListener((AddPackFindersEvent event) -> {
+            if (event.getPackType() == PackType.CLIENT_RESOURCES) {
+                Path path = ModList.get().getModFileById(modId).getFile().findResource("resourcepacks/" + packId);
+                event.addRepositorySource(source -> source.accept(new Pack(
+                        new PackLocationInfo(modId + ":" + packId, Component.literal(displayName), PackSource.BUILT_IN, Optional.empty()),
+                        new PathPackResources.PathResourcesSupplier(path),
+                        new Pack.Metadata(Component.empty(), PackCompatibility.COMPATIBLE, FeatureFlagSet.of(), List.of(), false),
+                        new PackSelectionConfig(required, Pack.Position.TOP, false)
+                )));
+            }
+        });
+    }
+
+    @Override
+    public void registerBuiltInDatapack(String modId, String packId, String displayName, boolean required, boolean enabledByDefault) {
         this.eventBus.addListener((AddPackFindersEvent event) -> {
             if (event.getPackType() == PackType.SERVER_DATA) {
                 Path path = ModList.get().getModFileById(modId).getFile().findResource("resourcepacks/" + packId);
                 event.addRepositorySource(source -> source.accept(new Pack(
                         new PackLocationInfo(modId + ":" + packId, Component.literal(displayName), PackSource.BUILT_IN, Optional.empty()),
                         new PathPackResources.PathResourcesSupplier(path),
-                        new Pack.Metadata(Component.empty(), PackCompatibility.COMPATIBLE, FeatureFlagSet.of(), List.of(), true),
-                        new PackSelectionConfig(true, Pack.Position.TOP, false)
+                        new Pack.Metadata(Component.empty(), PackCompatibility.COMPATIBLE, FeatureFlagSet.of(), List.of(), false),
+                        new PackSelectionConfig(required, Pack.Position.TOP, false)
                 )));
             }
         });

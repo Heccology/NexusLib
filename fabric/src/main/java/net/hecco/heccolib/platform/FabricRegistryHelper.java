@@ -19,6 +19,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -80,6 +81,11 @@ public class FabricRegistryHelper implements HLRegistryHelper {
     }
 
     @Override
+    public Holder<SoundEvent> registerSoundReference(String modId, String id) {
+        return Registry.registerForHolder(BuiltInRegistries.SOUND_EVENT, ResourceLocation.fromNamespaceAndPath(modId, id), SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(modId, id)));
+    }
+
+    @Override
     public <T> Supplier<DataComponentType<T>> registerComponentType(String modId, String name, UnaryOperator<DataComponentType.Builder<T>> builder) {
         DataComponentType<T> instance = builder.apply(DataComponentType.builder()).build();
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.fromNamespaceAndPath(modId, name), instance);
@@ -120,14 +126,27 @@ public class FabricRegistryHelper implements HLRegistryHelper {
     }
 
     @Override
-    public void registerBuiltInDatapack(String modId, String packId, String displayName) {
+    public void registerBuiltInResourcepack(String modId, String packId, String displayName, boolean required, boolean enabledByDefault) {
         Optional<ModContainer> container = FabricLoader.getInstance().getModContainer(modId);
         if (container.isPresent()) {
             ResourceManagerHelper.registerBuiltinResourcePack(
                     ResourceLocation.fromNamespaceAndPath(modId, packId),
                     container.get(),
                     Component.literal(displayName),
-                    ResourcePackActivationType.ALWAYS_ENABLED
+                    required ? ResourcePackActivationType.ALWAYS_ENABLED : enabledByDefault ? ResourcePackActivationType.DEFAULT_ENABLED : ResourcePackActivationType.NORMAL
+            );
+        }
+    }
+
+    @Override
+    public void registerBuiltInDatapack(String modId, String packId, String displayName, boolean required, boolean enabledByDefault) {
+        Optional<ModContainer> container = FabricLoader.getInstance().getModContainer(modId);
+        if (container.isPresent()) {
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    ResourceLocation.fromNamespaceAndPath(modId, packId),
+                    container.get(),
+                    Component.literal(displayName),
+                    required ? ResourcePackActivationType.ALWAYS_ENABLED : enabledByDefault ? ResourcePackActivationType.DEFAULT_ENABLED : ResourcePackActivationType.NORMAL
             );
         }
     }

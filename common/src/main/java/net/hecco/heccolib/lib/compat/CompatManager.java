@@ -40,7 +40,7 @@ public class CompatManager {
                     id.append(modId).append("_");
                 }
                 id.append("dat");
-                HLServices.REGISTRY.registerBuiltInDatapack(modId, id.toString(), integration.getDatapackName() != null ? integration.getDatapackName() : id.toString());
+                HLServices.REGISTRY.registerBuiltInDatapack(modId, id.toString(), integration.getDatapackName() != null ? integration.getDatapackName() : id.toString(), true, true);
             }
         }
     }
