@@ -34,7 +34,8 @@ public abstract class AbstractClientPlayerMixin extends Player {
             Map.entry("9778ff53-d83d-4233-8fa6-8aab7b89c4c0", "bountifulfares"), //Stellari_
             Map.entry("64f0361c-a7a8-43ec-83c4-378f8e28702c", "bountifulfares"), //wool___
             Map.entry("fc3f8da9-57d6-42df-a12c-34c3cb543d46", "bountifulfares"), //STRANGEPARTYZ
-            Map.entry("b110eaf9-60c1-4427-9a99-950dadceec08", "bountifulfares") //Lucifer_Starrr
+            Map.entry("b110eaf9-60c1-4427-9a99-950dadceec08", "bountifulfares"), //Lucifer_Starrr
+            Map.entry("af5c5305-b430-43ac-8d64-117e469faf05", "bountifulfares") //JuliyJuliusMC
     );
 
     public AbstractClientPlayerMixin(Level level, BlockPos pos, float yRot, GameProfile gameProfile) {

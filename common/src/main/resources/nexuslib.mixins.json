@@ -7,6 +7,7 @@
   "mixins": [
     "AbstractFurnaceBlockEntityMixin",
     "AxeItemMixin",
+    "DefaultAttributesMixin",
     "FeatureElementMixin",
     "FireBlockSetFlammableInvoker",
     "HoeItemMixin",
