@@ -14,7 +14,11 @@ public class KeyboardHandlerMixin {
 
     @Redirect(method = "keyPress", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;togglePostEffect()V"))
     private void nexuslib$fixToggleShadersGamemodeSwitcherIssue(GameRenderer instance) {
-        if (!InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), 292) && instance.currentEffect() != null && NLPostProcessShaderRegistry.SHADER_TO_TOGGLEABLE.getOrDefault(instance.currentEffect().getName(), true)) {
+        if (
+                !InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), 292) && //fixed your game mojang....again
+                instance.currentEffect() != null &&
+                NLPostProcessShaderRegistry.SHADER_TO_TOGGLEABLE.getOrDefault(instance.currentEffect().getName(), (player) -> true).apply(Minecraft.getInstance().player)
+        ) {
             instance.togglePostEffect();
         }
     }
