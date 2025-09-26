@@ -1,5 +1,6 @@
 package net.hecco.nexuslib.mixin;
 
+import net.hecco.nexuslib.NexusLib;
 import net.hecco.nexuslib.lib.postProcessShaderRegistry.NLPostProcessShaderRegistry;
 import net.hecco.nexuslib.platform.NLServices;
 import net.minecraft.client.Minecraft;
@@ -42,10 +43,30 @@ public abstract class GameRendererMixin {
         }
     }
 
-    @Inject(method = "shutdownEffect", at = @At("TAIL"))
-    private void nexuslib$tryEffectsAgain(CallbackInfo ci) {
-        if (NLServices.PLATFORM.isModLoaded("supplementaries")) {
-            checkEntityPostEffect(this.minecraft.getCameraEntity());
+//    @Inject(method = "shutdownEffect", at = @At("TAIL"))
+//    private void nexuslib$tryEffectsAgain(CallbackInfo ci) {
+//        if (NLServices.PLATFORM.isModLoaded("supplementaries")) {
+//            checkEntityPostEffect(this.minecraft.getCameraEntity());
+//        }
+//    }
+
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void nexuslib$checkConditions(CallbackInfo ci) {
+        Map<String, Function<Entity, Boolean>> conditons = NLPostProcessShaderRegistry.getConditions();
+        if (postEffect != null) {
+            NexusLib.LOGGER.info(postEffect.getName());
+            if (conditons.containsKey(postEffect.getName())) {
+                if (!conditons.get(postEffect.getName()).apply(this.minecraft.getCameraEntity())) {
+                    checkEntityPostEffect(this.minecraft.getCameraEntity());
+                }
+            }
+        } else {
+            for (Map.Entry<String, Function<Entity, Boolean>> condition : conditons.entrySet()) {
+                if (condition.getValue().apply(this.minecraft.getCameraEntity())) {
+                    checkEntityPostEffect(this.minecraft.getCameraEntity());
+                    return;
+                }
+            }
         }
     }
 }
