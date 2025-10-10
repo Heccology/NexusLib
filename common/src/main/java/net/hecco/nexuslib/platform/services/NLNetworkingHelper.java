@@ -15,5 +15,5 @@ public interface NLNetworkingHelper {
         }
     }
 
-    void sentToServer(CustomPacketPayload payload);
+    void sendToServer(CustomPacketPayload payload);
 }

@@ -12,7 +12,7 @@ public class NeoForgeNetworkingHelper implements NLNetworkingHelper {
     }
 
     @Override
-    public void sentToServer(CustomPacketPayload payload) {
+    public void sendToServer(CustomPacketPayload payload) {
         PacketDistributor.sendToServer(payload);
     }
 }

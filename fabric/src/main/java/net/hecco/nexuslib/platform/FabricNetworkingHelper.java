@@ -13,7 +13,7 @@ public class FabricNetworkingHelper implements NLNetworkingHelper {
     }
 
     @Override
-    public void sentToServer(CustomPacketPayload payload) {
+    public void sendToServer(CustomPacketPayload payload) {
         ClientPlayNetworking.send(payload);
     }
 }
