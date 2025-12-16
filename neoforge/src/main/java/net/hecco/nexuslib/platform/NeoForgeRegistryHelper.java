@@ -46,7 +46,7 @@ import java.util.function.UnaryOperator;
 
 
 public class NeoForgeRegistryHelper implements NLRegistryHelper {
-    private final Map<ResourceKey<? extends Registry<?>>, DeferredRegister<?>> registries = new HashMap<>();
+    private final Map<String, Map<ResourceKey<? extends Registry<?>>, DeferredRegister<?>>> mod_registries = new HashMap<>();
     private IEventBus eventBus = ModLoadingContext.get().getActiveContainer().getEventBus();
 
     public NeoForgeRegistryHelper(IEventBus eventBus) {
@@ -54,6 +54,11 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
     }
 
     public NeoForgeRegistryHelper() {
+    }
+
+    private Map<ResourceKey<? extends Registry<?>>, DeferredRegister<?>> startRegistry(String modId) {
+        if (!mod_registries.containsKey(modId)) mod_registries.put(modId, new HashMap<>());
+        return mod_registries.get(modId);
     }
 
     @Override
@@ -67,6 +72,7 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
     @Override
     public <T> Holder<T> registerForHolder(String modId, String id, Registry<T> registry1, Supplier<T> holder) {
         DeferredRegister<T> registry;
+        var registries = startRegistry(modId);
         if (!registries.containsKey(registry1.key())) {
             var i = DeferredRegister.create((ResourceKey) registry1.key(), modId);
             i.register(eventBus);
@@ -81,6 +87,8 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public <T extends BlockEntity> Supplier<BlockEntityType<T>> registerBlockEntityType(String modId, String id, Supplier<BlockEntityType<T>> supplier) {
         var registryKey = Registries.BLOCK_ENTITY_TYPE;
+        var registries = startRegistry(modId);
+
         if (!registries.containsKey(registryKey)) {
             var i = DeferredRegister.create((ResourceKey) registryKey, modId);
             i.register(eventBus);
@@ -99,6 +107,8 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
     @SuppressWarnings({"unchecked"})
     public <T extends EntityType<?>> Supplier<T> registerEntityType(String modId, String id, Supplier<T> supplier) {
         DeferredRegister<T> registry;
+        var registries = startRegistry(modId);
+
         if (!registries.containsKey(Registries.ENTITY_TYPE)) {
             var i = DeferredRegister.create(Registries.ENTITY_TYPE, modId);
             i.register(eventBus);
@@ -113,6 +123,7 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
     @SuppressWarnings({"unchecked"})
     public Holder<SoundEvent> registerSoundReference(String modId, String id) {
         DeferredRegister<SoundEvent> registry;
+        var registries = startRegistry(modId);
         if (!registries.containsKey(Registries.SOUND_EVENT)) {
             var i = DeferredRegister.create((ResourceKey) Registries.SOUND_EVENT, modId);
             i.register(eventBus);
@@ -127,6 +138,7 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
     @SuppressWarnings({"unchecked"})
     public <T> Supplier<DataComponentType<T>> registerComponentType(String modId, String name, UnaryOperator<DataComponentType.Builder<T>> builder) {
         DeferredRegister.DataComponents registry;
+        var registries = startRegistry(modId);
         if (!registries.containsKey(Registries.DATA_COMPONENT_TYPE)) {
             registry = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, modId);
             registry.register(eventBus);
@@ -140,22 +152,24 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
 
     @Override
     @SuppressWarnings({"unchecked"})
-    public Supplier<SimpleParticleType> registerParticleType(String modid, String id) {
+    public Supplier<SimpleParticleType> registerParticleType(String modId, String id) {
         DeferredRegister<SimpleParticleType> registry;
+        var registries = startRegistry(modId);
         if (!registries.containsKey(Registries.PARTICLE_TYPE)) {
-            var i = DeferredRegister.create(Registries.PARTICLE_TYPE, modid);
+            var i = DeferredRegister.create(Registries.PARTICLE_TYPE, modId);
             i.register(eventBus);
             registries.put(Registries.PARTICLE_TYPE, i);
         }
         registry = (DeferredRegister<SimpleParticleType>) registries.get(Registries.PARTICLE_TYPE);
         registry.register(id, () -> new SimpleParticleType(false));
-        return () -> (SimpleParticleType) BuiltInRegistries.PARTICLE_TYPE.get(ResourceLocation.fromNamespaceAndPath(modid, id));
+        return () -> (SimpleParticleType) BuiltInRegistries.PARTICLE_TYPE.get(ResourceLocation.fromNamespaceAndPath(modId, id));
     }
 
     @Override
     @SuppressWarnings({"unchecked"})
     public <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenu(String modId, String id, MenuSupplier<T> factory) {
         DeferredRegister<MenuType<?>> registry;
+        var registries = startRegistry(modId);
         if (!registries.containsKey(Registries.MENU)) {
             var i = DeferredRegister.create(Registries.MENU, modId);
             i.register(eventBus);
@@ -169,6 +183,7 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
     @SuppressWarnings({"unchecked"})
     public <T extends Recipe<?>> Supplier<RecipeType<T>> registerRecipeType(String modId, String id) {
         DeferredRegister<RecipeType<?>> registry;
+        var registries = startRegistry(modId);
         if (!registries.containsKey(Registries.RECIPE_TYPE)) {
             var i = DeferredRegister.create(Registries.RECIPE_TYPE, modId);
             i.register(eventBus);
@@ -183,6 +198,7 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
     @SuppressWarnings({"unchecked"})
     public <T extends Recipe<?>> Supplier<RecipeSerializer<T>> registerRecipeSerializer(String modId, String id, RecipeSerializer<T> serializer) {
         DeferredRegister<RecipeSerializer<?>> registry;
+        var registries = startRegistry(modId);
         if (!registries.containsKey(Registries.RECIPE_SERIALIZER)) {
             var i = DeferredRegister.create(Registries.RECIPE_SERIALIZER, modId);
             i.register(eventBus);
