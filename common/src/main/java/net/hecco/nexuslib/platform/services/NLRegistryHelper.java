@@ -1,12 +1,17 @@
 package net.hecco.nexuslib.platform.services;
 
+import com.mojang.serialization.MapCodec;
 import net.hecco.nexuslib.mixin.FireBlockSetFlammableInvoker;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
@@ -31,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
@@ -81,6 +87,8 @@ public interface NLRegistryHelper {
     <T> Supplier<DataComponentType<T>> registerComponentType(String modId, String name, UnaryOperator<DataComponentType.Builder<T>> builder);
 
     Supplier<SimpleParticleType> registerParticleType(String modid, String id);
+
+    <T extends ParticleOptions> Supplier<ParticleType<T>> registerParticleType(String modId, String id, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter);
 
     <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenu(String modId, String id, MenuSupplier<T> factory);
 

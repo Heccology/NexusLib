@@ -1,4 +1,4 @@
-package net.hecco.nexuslib.lib.defaultAttributeRegistry;
+package net.hecco.nexuslib.lib.loader_agnostic.defaultAttributeRegistry;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;

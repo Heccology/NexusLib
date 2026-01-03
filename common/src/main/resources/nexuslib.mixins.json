@@ -16,7 +16,9 @@
   "client": [
     "AbstractClientPlayerMixin",
     "GameRendererMixin",
+    "ItemRendererMixin",
     "KeyboardHandlerMixin",
+    "ModelLoaderMixin",
     "TerrainParticleMixin"
   ],
   "server": [],

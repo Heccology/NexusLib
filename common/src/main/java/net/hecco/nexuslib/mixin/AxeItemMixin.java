@@ -1,7 +1,7 @@
 package net.hecco.nexuslib.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.hecco.nexuslib.lib.toolAction.NLToolActions;
+import net.hecco.nexuslib.lib.loader_agnostic.toolAction.NLToolActions;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;

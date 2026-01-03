@@ -1,4 +1,4 @@
-package net.hecco.nexuslib.lib.toolAction;
+package net.hecco.nexuslib.lib.loader_agnostic.toolAction;
 
 import com.mojang.datafixers.util.Pair;
 import net.hecco.nexuslib.NexusLib;

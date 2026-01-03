@@ -1,7 +1,6 @@
 package net.hecco.nexuslib.mixin;
 
-import net.hecco.nexuslib.lib.defaultAttributeRegistry.NLDefaultAttributeRegistry;
-import net.minecraft.world.entity.Entity;
+import net.hecco.nexuslib.lib.loader_agnostic.defaultAttributeRegistry.NLDefaultAttributeRegistry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -11,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;

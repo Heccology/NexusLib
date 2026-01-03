@@ -1,5 +1,6 @@
 package net.hecco.nexuslib.platform;
 
+import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
@@ -11,9 +12,13 @@ import net.hecco.nexuslib.platform.services.NLRegistryHelper;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -32,6 +37,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import oshi.util.tuples.Pair;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
@@ -90,6 +96,20 @@ public class FabricRegistryHelper implements NLRegistryHelper {
     @Override
     public Supplier<SimpleParticleType> registerParticleType(String modid, String id) {
         var register = Registry.register(BuiltInRegistries.PARTICLE_TYPE, ResourceLocation.fromNamespaceAndPath(modid, id), FabricParticleTypes.simple());;
+        return () -> register;
+    }
+
+    @Override
+    public <T extends ParticleOptions> Supplier<ParticleType<T>> registerParticleType(String modId, String id, Function<ParticleType<T>, MapCodec<T>> codecGetter, Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
+        var register = Registry.register(BuiltInRegistries.PARTICLE_TYPE, ResourceLocation.fromNamespaceAndPath(modId, id), new ParticleType<T>(false) {
+            public MapCodec<T> codec() {
+                return codecGetter.apply(this);
+            }
+
+            public StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec() {
+                return streamCodecGetter.apply(this);
+            }
+        });
         return () -> register;
     }
 

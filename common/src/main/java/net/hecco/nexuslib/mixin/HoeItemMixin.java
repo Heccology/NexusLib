@@ -2,7 +2,7 @@ package net.hecco.nexuslib.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.datafixers.util.Pair;
-import net.hecco.nexuslib.lib.toolAction.NLToolActions;
+import net.hecco.nexuslib.lib.loader_agnostic.toolAction.NLToolActions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.context.UseOnContext;

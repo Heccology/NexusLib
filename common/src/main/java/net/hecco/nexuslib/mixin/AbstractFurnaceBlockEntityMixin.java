@@ -1,6 +1,6 @@
 package net.hecco.nexuslib.mixin;
 
-import net.hecco.nexuslib.lib.fuelRegistry.NLFuelRegistry;
+import net.hecco.nexuslib.lib.loader_agnostic.fuelRegistry.NLFuelRegistry;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;

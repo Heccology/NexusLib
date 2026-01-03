@@ -1,13 +1,18 @@
 package net.hecco.nexuslib.platform;
 
+import com.mojang.serialization.MapCodec;
 import net.hecco.nexuslib.platform.services.NLRegistryHelper;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackLocationInfo;
@@ -41,6 +46,7 @@ import oshi.util.tuples.Pair;
 
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
@@ -153,16 +159,39 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
     @Override
     @SuppressWarnings({"unchecked"})
     public Supplier<SimpleParticleType> registerParticleType(String modId, String id) {
-        DeferredRegister<SimpleParticleType> registry;
+        DeferredRegister<ParticleType<?>> registry;
         var registries = startRegistry(modId);
         if (!registries.containsKey(Registries.PARTICLE_TYPE)) {
             var i = DeferredRegister.create(Registries.PARTICLE_TYPE, modId);
             i.register(eventBus);
             registries.put(Registries.PARTICLE_TYPE, i);
         }
-        registry = (DeferredRegister<SimpleParticleType>) registries.get(Registries.PARTICLE_TYPE);
+        registry = (DeferredRegister<ParticleType<?>>) registries.get(Registries.PARTICLE_TYPE);
         registry.register(id, () -> new SimpleParticleType(false));
         return () -> (SimpleParticleType) BuiltInRegistries.PARTICLE_TYPE.get(ResourceLocation.fromNamespaceAndPath(modId, id));
+    }
+
+    @Override
+    @SuppressWarnings({"unchecked"})
+    public <T extends ParticleOptions> Supplier<ParticleType<T>> registerParticleType(String modId, String id, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
+        DeferredRegister<ParticleType<?>> registry;
+        var registries = startRegistry(modId);
+        if (!registries.containsKey(Registries.PARTICLE_TYPE)) {
+            var i = DeferredRegister.create(Registries.PARTICLE_TYPE, modId);
+            i.register(eventBus);
+            registries.put(Registries.PARTICLE_TYPE, i);
+        }
+        registry = (DeferredRegister<ParticleType<?>>) registries.get(Registries.PARTICLE_TYPE);
+        registry.register(id, () -> new ParticleType<T>(false) {
+            public MapCodec<T> codec() {
+                return codecGetter.apply(this);
+            }
+
+            public StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec() {
+                return streamCodecGetter.apply(this);
+            }
+        });
+        return () -> (ParticleType<T>) BuiltInRegistries.PARTICLE_TYPE.get(ResourceLocation.fromNamespaceAndPath(modId, id));
     }
 
     @Override

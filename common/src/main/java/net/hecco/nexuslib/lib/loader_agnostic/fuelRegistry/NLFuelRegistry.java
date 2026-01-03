@@ -1,4 +1,4 @@
-package net.hecco.nexuslib.lib.fuelRegistry;
+package net.hecco.nexuslib.lib.loader_agnostic.fuelRegistry;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
