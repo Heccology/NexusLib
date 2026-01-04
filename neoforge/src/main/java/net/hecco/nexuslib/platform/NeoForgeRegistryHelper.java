@@ -1,7 +1,11 @@
 package net.hecco.nexuslib.platform;
 
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.serialization.MapCodec;
 import net.hecco.nexuslib.platform.services.NLRegistryHelper;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
@@ -236,6 +240,24 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
         registry = (DeferredRegister<RecipeSerializer<?>>) registries.get(Registries.RECIPE_SERIALIZER);
 
         return registry.register(id, () -> serializer);
+    }
+
+    @SuppressWarnings({"unchecked"})
+    @Override
+    public <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>> void registerCommandArgumentType(String modId, String id, Class<A> clazz, ArgumentTypeInfo<A, T> serializer) {
+        DeferredRegister<ArgumentTypeInfo<?, ?>> registry;
+        var registries = startRegistry(modId);
+        if (!registries.containsKey(Registries.COMMAND_ARGUMENT_TYPE)) {
+            var i = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, modId);
+            i.register(eventBus);
+            registries.put(Registries.COMMAND_ARGUMENT_TYPE, i);
+        }
+        registry = (DeferredRegister<ArgumentTypeInfo<?, ?>>) registries.get(Registries.COMMAND_ARGUMENT_TYPE);
+
+        registry.register(id, () -> {
+            ArgumentTypeInfos.registerByClass(clazz, serializer);
+            return serializer;
+        });
     }
 
 

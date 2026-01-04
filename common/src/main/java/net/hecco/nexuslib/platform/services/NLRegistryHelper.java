@@ -1,7 +1,9 @@
 package net.hecco.nexuslib.platform.services;
 
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.serialization.MapCodec;
 import net.hecco.nexuslib.mixin.FireBlockSetFlammableInvoker;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -13,6 +15,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -101,6 +104,8 @@ public interface NLRegistryHelper {
 
         @NotNull T create(int var1, Inventory var2);
     }
+
+    <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>> void registerCommandArgumentType(String modId, String id, Class<A> clazz, ArgumentTypeInfo<A, T> serializer);
 
     default void setFlammable(Block block, int encouragement, int flammability) {
         ((FireBlockSetFlammableInvoker) Blocks.FIRE).nexuslib$setFlammable(block, encouragement, flammability);
