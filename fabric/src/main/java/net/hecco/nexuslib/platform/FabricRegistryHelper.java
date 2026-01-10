@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
@@ -27,6 +28,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -38,6 +40,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import oshi.util.tuples.Pair;
 
 import java.util.*;
@@ -138,6 +141,12 @@ public class FabricRegistryHelper implements NLRegistryHelper {
     @Override
     public <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>> void registerCommandArgumentType(String modId, String id, Class<A> clazz, ArgumentTypeInfo<A, T> serializer) {
         ArgumentTypeRegistry.registerArgumentType(ResourceLocation.fromNamespaceAndPath(modId, id), clazz, serializer);
+    }
+
+    @Override
+    public Supplier<PoiType> registerPoiType(String modId, String id, Set<BlockState> matchingStates, int maxTickets, int validRange) {
+        var registered = PointOfInterestHelper.register(ResourceLocation.fromNamespaceAndPath(modId, id), maxTickets, validRange, matchingStates);
+        return () -> registered;
     }
 
     @Override

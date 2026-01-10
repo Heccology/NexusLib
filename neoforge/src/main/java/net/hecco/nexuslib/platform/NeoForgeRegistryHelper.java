@@ -28,6 +28,7 @@ import net.minecraft.server.packs.repository.PackCompatibility;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -41,6 +42,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
@@ -258,6 +260,21 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
             ArgumentTypeInfos.registerByClass(clazz, serializer);
             return serializer;
         });
+    }
+
+    @SuppressWarnings({"unchecked"})
+    @Override
+    public Supplier<PoiType> registerPoiType(String modId, String id, Set<BlockState> matchingStates, int maxTickets, int validRange) {
+        DeferredRegister<PoiType> registry;
+        var registries = startRegistry(modId);
+        if (!registries.containsKey(Registries.POINT_OF_INTEREST_TYPE)) {
+            var i = DeferredRegister.create(Registries.POINT_OF_INTEREST_TYPE, modId);
+            i.register(eventBus);
+            registries.put(Registries.POINT_OF_INTEREST_TYPE, i);
+        }
+        registry = (DeferredRegister<PoiType>) registries.get(Registries.POINT_OF_INTEREST_TYPE);
+
+        return registry.register(id, () -> new PoiType(matchingStates, maxTickets, validRange));
     }
 
 

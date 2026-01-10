@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -39,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -106,6 +108,8 @@ public interface NLRegistryHelper {
     }
 
     <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>> void registerCommandArgumentType(String modId, String id, Class<A> clazz, ArgumentTypeInfo<A, T> serializer);
+
+    Supplier<PoiType> registerPoiType(String modId, String id, Set<BlockState> matchingStates, int maxTickets, int validRange);
 
     default void setFlammable(Block block, int encouragement, int flammability) {
         ((FireBlockSetFlammableInvoker) Blocks.FIRE).nexuslib$setFlammable(block, encouragement, flammability);
