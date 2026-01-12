@@ -54,7 +54,6 @@ public abstract class GameRendererMixin {
     private void nexuslib$checkConditions(CallbackInfo ci) {
         Map<String, Function<Entity, Boolean>> conditons = NLPostProcessShaderRegistry.getConditions();
         if (postEffect != null) {
-            NexusLib.LOGGER.info(postEffect.getName());
             if (conditons.containsKey(postEffect.getName())) {
                 if (!conditons.get(postEffect.getName()).apply(this.minecraft.getCameraEntity())) {
                     checkEntityPostEffect(this.minecraft.getCameraEntity());
