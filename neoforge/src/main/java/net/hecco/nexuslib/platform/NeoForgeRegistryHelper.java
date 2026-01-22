@@ -47,6 +47,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import oshi.util.tuples.Pair;
 
@@ -280,6 +281,11 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
 
     @Override
     public void addItemsToItemGroup(ResourceKey<CreativeModeTab> tab, ArrayList<Pair<ItemLike, ItemStack>> items) {
+        this.eventBus.addListener((BuildCreativeModeTabContentsEvent event) -> {
+            if (event.getTabKey() == tab) {
+                items.forEach(pair -> event.insertAfter(pair.getA().asItem().getDefaultInstance(), pair.getB(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS));
+            }
+        });
     }
 
     @Override

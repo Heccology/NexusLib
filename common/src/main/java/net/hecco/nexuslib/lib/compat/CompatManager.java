@@ -2,18 +2,18 @@ package net.hecco.nexuslib.lib.compat;
 
 import net.hecco.nexuslib.NexusLib;
 import net.hecco.nexuslib.platform.NLServices;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class CompatManager {
 
     protected final String modId;
     protected final List<ModIntegration> INTEGRATIONS = new ArrayList<>();
-    public final Map<Supplier<?>, ModIntegration> CONTENT = new HashMap<>();
+    public final Map<ResourceLocation, ModIntegration> CONTENT = new HashMap<>();
 
     protected CompatManager(String modId) {
         this.modId = modId;
@@ -41,6 +41,11 @@ public class CompatManager {
                 }
                 id.append("dat");
                 NLServices.REGISTRY.registerBuiltInDatapack(modId, id.toString(), integration.getDatapackName() != null ? integration.getDatapackName() : id.toString(), true, true);
+            }
+        }
+        for (Map.Entry<ResourceLocation, ModIntegration> entries : CONTENT.entrySet()) {
+            if (!(entries.getValue().modIds().stream().allMatch(NLServices.PLATFORM::isModLoaded) || NLServices.PLATFORM.isDatagen())) {
+                NLCompatAPI.DISABLED_CACHE.add(entries.getKey());
             }
         }
     }

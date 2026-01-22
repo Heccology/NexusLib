@@ -20,11 +20,7 @@ public interface FeatureElementMixin {
         FeatureElement self = (FeatureElement)(Object)this;
         ResourceLocation id = NLCompatAPI.getId(self);
         if (id != null && !id.getNamespace().equals("minecraft")) {
-            boolean i = NLCompatAPI.check(self);
-            if (i) {
-                cir.setReturnValue(false);
-                cir.cancel();
-            }
+            cir.setReturnValue(!NLCompatAPI.DISABLED_CACHE.contains(id));
         }
     }
 }

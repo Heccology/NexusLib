@@ -1,23 +1,17 @@
 package net.hecco.nexuslib.lib.compat;
 
-import net.hecco.nexuslib.platform.NLServices;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.flag.FeatureElement;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Supplier;
+import java.util.*;
 
 public class NLCompatAPI {
     private static final Map<String, CompatManager> MANAGERS = new HashMap<>();
+
 
     public static CompatManager createCompatManager(String modId) {
         CompatManager manager = new CompatManager(modId);
@@ -29,33 +23,24 @@ public class NLCompatAPI {
         return MANAGERS;
     }
 
-    public static boolean check(FeatureElement element) {
-        for (CompatManager manager : MANAGERS.values()) {
-            for (Map.Entry<Supplier<?>, ModIntegration> entry : manager.CONTENT.entrySet()) {
-                if (entry.getKey().get() == element) {
-                    ModIntegration integration = entry.getValue();
-                    return !integration.modIds().stream().allMatch(NLServices.PLATFORM::isModLoaded) && !NLServices.PLATFORM.isDatagen();
-                }
-            }
-        }
-        return false;
+    public static final Set<ResourceLocation> DISABLED_CACHE = new ObjectOpenHashSet<>();
 
+    public static final Map<FeatureElement, ResourceLocation> ID_CACHE = Collections.synchronizedMap(new WeakHashMap<>());
+    public static ResourceLocation getId(FeatureElement element) {
+        if (ID_CACHE.containsKey(element)) {
+            return ID_CACHE.get(element);
+        } else {
+            ResourceLocation id = resolveId(element);
+            ID_CACHE.put(element, id);
+            return id;
+        }
     }
 
-    @Nullable
-    public static ResourceLocation getId(FeatureElement element) {
+    public static ResourceLocation resolveId(FeatureElement element) {
         if (element instanceof Item item)
             return BuiltInRegistries.ITEM.getKey(item);
         if (element instanceof Block block)
             return BuiltInRegistries.BLOCK.getKey(block);
-        if (element instanceof EntityType<?> type)
-            return BuiltInRegistries.ENTITY_TYPE.getKey(type);
-        if (element instanceof MenuType<?> menu)
-            return BuiltInRegistries.MENU.getKey(menu);
-        if (element instanceof Potion potion)
-            return BuiltInRegistries.POTION.getKey(potion);
-        if (element instanceof MobEffect effect)
-            return BuiltInRegistries.MOB_EFFECT.getKey(effect);
         return null;
     }
 
