@@ -24,7 +24,8 @@ public interface ModIntegration {
     void registerContent();
 
     default Supplier<?> registerContent(ResourceLocation location, Supplier<?> content) {
-        getCompatManager().CONTENT.put(location, this);
+        getCompatManager().CONTENT_ID_TO_INTEGRATION.put(location, this);
+        getCompatManager().CONTENT_TO_INTEGRATION.put(content, this);
         return content;
     }
 
