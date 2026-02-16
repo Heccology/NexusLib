@@ -40,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -78,6 +79,7 @@ public interface NLRegistryHelper {
     <T extends BlockEntity> Supplier<BlockEntityType<T>> registerBlockEntityType(String modid, String id, Supplier<BlockEntityType<T>> supplier);
 
     <T extends BlockEntity> BlockEntityType<T> createBlockEntity(BlockEntitySupplier<T> supplier, Supplier<Block>... blocks);
+    <T extends BlockEntity> BlockEntityType<T> createBlockEntity(BlockEntitySupplier<T> supplier, List<Supplier<Block>> blocks);
 
     @FunctionalInterface
     interface BlockEntitySupplier<T extends BlockEntity> {

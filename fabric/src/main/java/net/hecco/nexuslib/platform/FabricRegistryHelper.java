@@ -83,6 +83,12 @@ public class FabricRegistryHelper implements NLRegistryHelper {
     }
 
     @Override
+    public <T extends BlockEntity> BlockEntityType<T> createBlockEntity(BlockEntitySupplier<T> supplier, List<Supplier<Block>> blocks) {
+        var register = FabricBlockEntityTypeBuilder.create(supplier::create, blocks.stream().map(Supplier::get).toArray(Block[]::new)).build();
+        return register;
+    }
+
+    @Override
     public <T extends EntityType<?>> Supplier<T> registerEntityType(String modid, String id, Supplier<T> supplier) {
         var registered = Registry.register(BuiltInRegistries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(modid, id), supplier.get());
         return () -> registered;

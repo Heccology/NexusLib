@@ -117,6 +117,11 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
     }
 
     @Override
+    public <T extends BlockEntity> BlockEntityType<T> createBlockEntity(BlockEntitySupplier<T> supplier, List<Supplier<Block>> blocks) {
+        return BlockEntityType.Builder.of(supplier::create, blocks.stream().map(Supplier::get).toArray(Block[]::new)).build(null);
+    }
+
+    @Override
     @SuppressWarnings({"unchecked"})
     public <T extends EntityType<?>> Supplier<T> registerEntityType(String modId, String id, Supplier<T> supplier) {
         DeferredRegister<T> registry;
