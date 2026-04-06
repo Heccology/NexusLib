@@ -27,6 +27,9 @@ public class BlockFamilyCreator {
     public static final Map<Supplier<Block>, BlockFamilyCreator> BLOCK_TO_BLOCK_FAMILY = new HashMap<>();
 
     public final Map<Supplier<Block>, Supplier<Block>> VARIANT_TO_BASE_BLOCK = new HashMap<>();
+
+    public final Map<Supplier<Block>, String> BLOCK_TO_RECIPE_GROUP = new HashMap<>();
+
     public final ArrayList<Supplier<Block>> STAIRS = new ArrayList<>();
     public final ArrayList<Supplier<Block>> SLABS = new ArrayList<>();
     public final ArrayList<Supplier<Block>> WALLS = new ArrayList<>();
@@ -81,6 +84,8 @@ public class BlockFamilyCreator {
     private Supplier<Block> currentBlock;
     private boolean generateModel = true;
 
+    private String currentRecipeGroup = "";
+
 
     public final Map<String, Supplier<Block>> blockFamilyBlocks = new HashMap<>();
 
@@ -114,6 +119,7 @@ public class BlockFamilyCreator {
         if (registeredBlock != currentBlock) {
             VARIANT_TO_BASE_BLOCK.put(registeredBlock, currentBlock);
         }
+        BLOCK_TO_RECIPE_GROUP.put(registeredBlock, this.currentRecipeGroup);
         return registeredBlock;
     }
 
@@ -133,6 +139,7 @@ public class BlockFamilyCreator {
             case IRON -> NEEDS_IRON_TOOL.add(registeredBlock);
             case DIAMOND -> NEEDS_DIAMOND_TOOL.add(registeredBlock);
         }
+        BLOCK_TO_RECIPE_GROUP.put(registeredBlock, this.currentRecipeGroup);
         return registeredBlock;
     }
 
@@ -179,6 +186,16 @@ public class BlockFamilyCreator {
     public BlockFamilyCreator updateAffixes(String prefix, String suffix) {
         this.prefix = prefix == "" ? "" : prefix + "_";
         this.suffix = suffix == "" ? "" : "_" + (suffix.substring(suffix.length()-1) == "s" ? suffix.replace(suffix.substring(suffix.length()-1), "") : suffix);
+        return this;
+    }
+
+    public BlockFamilyCreator setRecipeGroup(String group) {
+        this.currentRecipeGroup = group;
+        return this;
+    }
+
+    public BlockFamilyCreator resetRecipeGroup() {
+        this.currentRecipeGroup = "";
         return this;
     }
 

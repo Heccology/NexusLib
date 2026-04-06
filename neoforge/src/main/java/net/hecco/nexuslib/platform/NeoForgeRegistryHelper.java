@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import net.hecco.nexuslib.platform.services.NLRegistryHelper;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
-import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
@@ -43,6 +42,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
@@ -281,6 +285,53 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
         registry = (DeferredRegister<PoiType>) registries.get(Registries.POINT_OF_INTEREST_TYPE);
 
         return registry.register(id, () -> new PoiType(matchingStates, maxTickets, validRange));
+    }
+
+    @SuppressWarnings({"unchecked"})
+    @Override
+    public <T extends Structure> Supplier<StructureType<T>> registerStructureType(String modId, String id, Supplier<MapCodec<T>> pieceType) {
+        DeferredRegister<StructureType<T>> registry;
+        var registries = startRegistry(modId);
+        if (!registries.containsKey(Registries.STRUCTURE_TYPE)) {
+            var i = DeferredRegister.create(Registries.STRUCTURE_TYPE, modId);
+            i.register(eventBus);
+            registries.put(Registries.STRUCTURE_TYPE, i);
+        }
+        registry = (DeferredRegister<StructureType<T>>) registries.get(Registries.STRUCTURE_TYPE);
+
+        return registry.register(id, () -> pieceType::get);
+    }
+
+    @SuppressWarnings({"unchecked"})
+    @Override
+    public <T extends StructurePieceType> Supplier<T> registerStructurePiece(String modId, String id, Supplier<T> pieceType) {
+        DeferredRegister<StructurePieceType> registry;
+        var registries = startRegistry(modId);
+        if (!registries.containsKey(Registries.STRUCTURE_PIECE))
+        {
+            var i = DeferredRegister.create(Registries.STRUCTURE_PIECE, modId);
+            i.register(eventBus);
+            registries.put(Registries.STRUCTURE_PIECE, i);
+        }
+        registry = (DeferredRegister<StructurePieceType>) registries.get(Registries.STRUCTURE_PIECE);
+
+        return registry.register(id, pieceType);
+    }
+
+    @SuppressWarnings({"unchecked"})
+    @Override
+    public <P extends StructureProcessor> Supplier<StructureProcessorType<P>> registerStructureProcessor(String modId, String name, Supplier<MapCodec<P>> codec) {
+        DeferredRegister<StructureProcessorType<P>> registry;
+        var registries = startRegistry(modId);
+        if (!registries.containsKey(Registries.STRUCTURE_PROCESSOR))
+        {
+            var i = DeferredRegister.create(Registries.STRUCTURE_PROCESSOR, modId);
+            i.register(eventBus);
+            registries.put(Registries.STRUCTURE_PROCESSOR, i);
+        }
+        registry = (DeferredRegister<StructureProcessorType<P>>) registries.get(Registries.STRUCTURE_PROCESSOR);
+
+        return registry.register(name, () -> codec::get);
     }
 
 

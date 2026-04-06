@@ -22,7 +22,7 @@ public abstract class NLLanguageProvider extends FabricLanguageProvider {
         this.MOD_ID = modId;
     }
 
-    Set<String> usedTranslationKeys = new HashSet<>();
+    protected Set<String> usedTranslationKeys = new HashSet<>();
 
     public void generate(TranslationBuilder translationBuilder, String key, String translation) {
         if(usedTranslationKeys.contains(key)) {

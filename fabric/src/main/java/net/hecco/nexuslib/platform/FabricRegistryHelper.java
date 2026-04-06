@@ -41,6 +41,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import oshi.util.tuples.Pair;
 
 import java.util.*;
@@ -152,6 +157,23 @@ public class FabricRegistryHelper implements NLRegistryHelper {
     @Override
     public Supplier<PoiType> registerPoiType(String modId, String id, Set<BlockState> matchingStates, int maxTickets, int validRange) {
         var registered = PointOfInterestHelper.register(ResourceLocation.fromNamespaceAndPath(modId, id), maxTickets, validRange, matchingStates);
+        return () -> registered;
+    }
+
+    @Override
+    public <T extends Structure> Supplier<StructureType<T>> registerStructureType(String modId, String id, Supplier<MapCodec<T>> pieceType) {
+        var registered = Registry.register(BuiltInRegistries.STRUCTURE_TYPE, ResourceLocation.fromNamespaceAndPath(modId, id), () ->  (MapCodec<Structure>)pieceType.get());
+        return () -> (StructureType<T>)registered;
+    }
+    @Override
+    public <T extends StructurePieceType> Supplier<T> registerStructurePiece(String modId, String id, Supplier<T> pieceType) {
+        var registered = Registry.register(BuiltInRegistries.STRUCTURE_PIECE, ResourceLocation.fromNamespaceAndPath(modId, id), pieceType.get());
+        return () -> registered;
+    }
+
+    @Override
+    public <P extends StructureProcessor> Supplier<StructureProcessorType<P>> registerStructureProcessor(String modId, String name, Supplier<MapCodec<P>> codec) {
+        var registered = Registry.register(BuiltInRegistries.STRUCTURE_PROCESSOR, ResourceLocation.fromNamespaceAndPath(modId, name), (StructureProcessorType) codec);
         return () -> registered;
     }
 

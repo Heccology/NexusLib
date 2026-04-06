@@ -36,6 +36,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
@@ -112,6 +117,10 @@ public interface NLRegistryHelper {
     <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>> void registerCommandArgumentType(String modId, String id, Class<A> clazz, ArgumentTypeInfo<A, T> serializer);
 
     Supplier<PoiType> registerPoiType(String modId, String id, Set<BlockState> matchingStates, int maxTickets, int validRange);
+
+    <T extends Structure> Supplier<StructureType<T>> registerStructureType(String modId, String id, Supplier<MapCodec<T>> pieceType);
+    <T extends StructurePieceType> Supplier<T> registerStructurePiece(String modId, String id, Supplier<T> pieceType);
+    <P extends StructureProcessor> Supplier<StructureProcessorType<P>> registerStructureProcessor(String modId, String name, Supplier<MapCodec<P>> codec);
 
     default void setFlammable(Block block, int encouragement, int flammability) {
         ((FireBlockSetFlammableInvoker) Blocks.FIRE).nexuslib$setFlammable(block, encouragement, flammability);
