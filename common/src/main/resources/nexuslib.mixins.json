@@ -11,7 +11,8 @@
     "FeatureElementMixin",
     "FireBlockSetFlammableInvoker",
     "HoeItemMixin",
-    "ShovelItemMixin"
+    "ShovelItemMixin",
+    "WolfVariantsMixin"
   ],
   "client": [
     "AbstractClientPlayerMixin",

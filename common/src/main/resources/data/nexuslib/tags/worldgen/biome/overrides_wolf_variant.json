@@ -1,0 +1,12 @@
+{
+  "values": [
+    "#nexuslib:has_wolf_ashen_variant",
+    "#nexuslib:has_wolf_black_variant",
+    "#nexuslib:has_wolf_chestnut_variant",
+    "#nexuslib:has_wolf_rusty_variant",
+    "#nexuslib:has_wolf_snowy_variant",
+    "#nexuslib:has_wolf_spotted_variant",
+    "#nexuslib:has_wolf_striped_variant",
+    "#nexuslib:has_wolf_woods_variant"
+  ]
+}
