@@ -73,7 +73,8 @@ public final class NLCapeManager {
         );
 
         add(UUID.fromString("385f22c1-4661-4982-b024-80996b0edbc5"), //WorkGoblin
-                cape("bountifulfares")
+                cape("bountifulfares"),
+                cape("subterrous")
         );
 
         add(UUID.fromString("9778ff53-d83d-4233-8fa6-8aab7b89c4c0"), //Stellari_
@@ -85,7 +86,8 @@ public final class NLCapeManager {
         );
 
         add(UUID.fromString("fc3f8da9-57d6-42df-a12c-34c3cb543d46"), //STRANGEPARTYZ
-                cape("bountifulfares")
+                cape("bountifulfares"),
+                cape("subterrous")
         );
 
         add(UUID.fromString("b110eaf9-60c1-4427-9a99-950dadceec08"), //Lucifer_Starrr
@@ -93,11 +95,61 @@ public final class NLCapeManager {
         );
 
         add(UUID.fromString("af5c5305-b430-43ac-8d64-117e469faf05"), //JuliyJuliusMC
-                cape("bountifulfares")
+                cape("bountifulfares"),
+                cape("subterrous")
         );
 
         add(UUID.fromString("bea56b09-adb3-4da8-831a-0016b56319a7"), //Felixe_
                 cape("bountifulfares")
+        );
+
+
+        //Subterrous Playtesters
+
+        add(UUID.fromString("512751b0-481a-471d-85b7-9bfba10a016d"), //cwdotpng
+                cape("subterrous")
+        );
+        add(UUID.fromString("ea114f80-3cec-4abb-b904-0d20716cb2d4"), //PMania
+                cape("subterrous")
+        );
+        add(UUID.fromString("3562ab33-f01b-4801-aab5-807f3750ded1"), //AbysswalkerDeno
+                cape("subterrous")
+        );
+        add(UUID.fromString("c1be3aa5-e9e6-42c0-a47d-f981f4cb63e4"), //AleXsander69
+                cape("subterrous")
+        );
+        add(UUID.fromString("1fb0ecbd-2000-4f00-aa65-002c1ccedef7"), //StarlitStelle
+                cape("subterrous")
+        );
+        add(UUID.fromString("5cc8b9ad-b10e-4a5d-9ae8-33247502497d"), //Hyperforg
+                cape("subterrous")
+        );
+        add(UUID.fromString("7809cf0d-23c1-47e9-a366-9b023cae1583"), //ClephLeSDF
+                cape("subterrous")
+        );
+        add(UUID.fromString("f1ec4cf4-584e-4b5b-a59a-fcfdf4a8bba1"), //kemiu
+                cape("subterrous")
+        );
+        add(UUID.fromString("692bc640-c258-4a9c-8a71-bc1e773083ac"), //chlowey_
+                cape("subterrous")
+        );
+        add(UUID.fromString("2dd03cc0-baff-4998-ade8-db0363d881d1"), //Jasdernn
+                cape("subterrous")
+        );
+        add(UUID.fromString("4c536f4a-80b1-40d7-be0f-bec603e3889d"), //Silviodozen
+                cape("subterrous")
+        );
+        add(UUID.fromString("85cf85df-3c15-40c1-b0fa-390f45e4e6a7"), //Kontiolax
+                cape("subterrous")
+        );
+        add(UUID.fromString("1e36cd2b-e564-4cc4-90e0-d05d6dc55df8"), //GrayAlex226
+                cape("subterrous")
+        );
+        add(UUID.fromString("f134adfe-b882-4260-ae14-4282e8fc84a0"), //Mosca__
+                cape("subterrous")
+        );
+        add(UUID.fromString("f1df9144-dbd9-413b-bd10-1f92f409c622"), //EnderKTS
+                cape("subterrous")
         );
 
         load();
