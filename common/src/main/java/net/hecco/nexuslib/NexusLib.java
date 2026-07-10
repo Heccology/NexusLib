@@ -2,6 +2,8 @@ package net.hecco.nexuslib;
 
 import net.hecco.nexuslib.lib.postProcessShaderRegistry.NLPostProcessShaderRegistry;
 import net.hecco.nexuslib.lib.untintedParticleRegistry.NLUntintedParticleRegistry;
+import net.hecco.nexuslib.lib.util.NLCapeManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;

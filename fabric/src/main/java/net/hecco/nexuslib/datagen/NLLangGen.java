@@ -13,12 +13,13 @@ public class NLLangGen extends FabricLanguageProvider {
 
     @Override
     public void generateTranslations(HolderLookup.Provider provider, TranslationBuilder builder) {
-        builder.add("nexuslib.cape.vanilla", "Vanilla Cape");
-        builder.add("nexuslib.cape.bountifulfares", "Bountiful Fares");
-        builder.add("nexuslib.cape.bountifulfares_super", "Bountiful Fares Super");
-        builder.add("nexuslib.cape.nexuslib", "NexusLib");
-        builder.add("nexuslib.cape.subterrous", "Subterrous");
-        builder.add("nexuslib.cape.subterrous_super", "Subterrous Super");
-        builder.add("nexuslib.tooltip.cape_button", "NexusLib Cape: %s");
+        builder.add("nexuslib.cape.vanilla", "OFF");
+        builder.add("nexuslib.cape.bountifulfares", "Bountiful Fares Contributor");
+        builder.add("nexuslib.cape.bountifulfares_super", "B.F. Super Contributor");
+        builder.add("nexuslib.cape.nexuslib", "NexusLib Contributor");
+        builder.add("nexuslib.cape.subterrous", "Subterrous Contributor");
+        builder.add("nexuslib.cape.subterrous_super", "Subt. Super Contributor");
+        builder.add("nexuslib.cape.feldspar", "Feldspar");
+        builder.add("nexuslib.tooltip.cape_button", "Heccology Cape: %s");
     }
 }

@@ -26,12 +26,22 @@ public final class NLCapeManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     static {
+        add(UUID.fromString("380df991-f603-344c-a090-369bad2a924a"), //Dev
+                cape("nexuslib"),
+                cape("bountifulfares"),
+                cape("bountifulfares_super"),
+                cape("subterrous"),
+                cape("subterrous_super"),
+                cape("feldspar")
+        );
+
         add(UUID.fromString("1cedf927-5c8f-4650-95e9-808fc8f94d00"), //Yirmiri
                 cape("nexuslib"),
                 cape("bountifulfares"),
                 cape("bountifulfares_super"),
                 cape("subterrous"),
-                cape("subterrous_super")
+                cape("subterrous_super"),
+                cape("feldspar")
         );
 
         add(UUID.fromString("bc56b2c8-9ef8-4532-b045-00f44804bca4"), //TheHecco
@@ -47,16 +57,19 @@ public final class NLCapeManager {
                 cape("bountifulfares"),
                 cape("bountifulfares_super"),
                 cape("subterrous"),
-                cape("subterrous_super")
+                cape("subterrous_super"),
+                cape("feldspar")
         );
 
         add(UUID.fromString("d1dac9fe-3ef0-4ea8-997b-b7cdd6a92131"), //arid_lizzy
-                cape("bountifulfares")
+                cape("bountifulfares"),
+                cape("feldspar")
         );
 
         add(UUID.fromString("32290fa8-77ed-4794-9cba-25c09e7f4e1d"), //Diemond_Player
                 cape("bountifulfares"),
-                cape("bountifulfares_super")
+                cape("bountifulfares_super"),
+                cape("feldspar")
         );
 
         add(UUID.fromString("385f22c1-4661-4982-b024-80996b0edbc5"), //WorkGoblin
@@ -144,20 +157,24 @@ public final class NLCapeManager {
         return Component.translatable(NAMES.get(texture));
     }
 
-    private static void load() {
+    public static void load() {
+        NexusLib.LOGGER.info("ran load!");
         if (!Files.exists(FILE)) return;
-
+        NexusLib.LOGGER.info("file!");
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.player == null) return;
 
         try (Reader reader = Files.newBufferedReader(FILE)) {
+            NexusLib.LOGGER.info("reader!");
             Integer selected = GSON.fromJson(reader, Integer.class);
 
             if (selected == null) return;
+            NexusLib.LOGGER.info("selected isnt null!");
 
             SELECTED.clear();
-            SELECTED.put(minecraft.player.getUUID(), selected);
+            SELECTED.put(minecraft.getUser().getProfileId(), selected);
+            NexusLib.LOGGER.info("finished!");
         } catch (IOException ignored) {
+            NexusLib.LOGGER.info("exception!");
         }
     }
 
