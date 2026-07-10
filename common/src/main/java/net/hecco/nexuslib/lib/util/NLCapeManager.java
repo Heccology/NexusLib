@@ -158,23 +158,17 @@ public final class NLCapeManager {
     }
 
     public static void load() {
-        NexusLib.LOGGER.info("ran load!");
         if (!Files.exists(FILE)) return;
-        NexusLib.LOGGER.info("file!");
         Minecraft minecraft = Minecraft.getInstance();
 
         try (Reader reader = Files.newBufferedReader(FILE)) {
-            NexusLib.LOGGER.info("reader!");
             Integer selected = GSON.fromJson(reader, Integer.class);
 
             if (selected == null) return;
-            NexusLib.LOGGER.info("selected isnt null!");
 
             SELECTED.clear();
             SELECTED.put(minecraft.getUser().getProfileId(), selected);
-            NexusLib.LOGGER.info("finished!");
         } catch (IOException ignored) {
-            NexusLib.LOGGER.info("exception!");
         }
     }
 
