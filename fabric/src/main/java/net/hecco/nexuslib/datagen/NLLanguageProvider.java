@@ -24,11 +24,11 @@ public abstract class NLLanguageProvider extends FabricLanguageProvider {
 
     protected Set<String> usedTranslationKeys = new HashSet<>();
 
-    public void generate(TranslationBuilder translationBuilder, String key, String translation) {
+    public void generate(TranslationBuilder builder, String key, String translation) {
         if(usedTranslationKeys.contains(key)) {
             return;
         }
-        translationBuilder.add(key, translation);
+        builder.add(key, translation);
         usedTranslationKeys.add(key);
     }
 

@@ -1,5 +1,7 @@
 package net.hecco.nexuslib.platform.services;
 
+import java.nio.file.Path;
+
 public interface NLPlatformHelper {
 
     /**
@@ -24,6 +26,10 @@ public interface NLPlatformHelper {
      */
     boolean isDevelopmentEnvironment();
 
+    /**
+     * Gets the game directory for the current loader.
+     */
+    Path gameDir();
 
     boolean isDatagen();
     /**

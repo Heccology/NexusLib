@@ -16,4 +16,6 @@ public interface NLNetworkingHelper {
     }
 
     void sendToServer(CustomPacketPayload payload);
+
+    void sendSelectedCape(int index);
 }

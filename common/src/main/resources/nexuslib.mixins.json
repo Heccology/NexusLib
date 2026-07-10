@@ -15,11 +15,12 @@
     "WolfVariantsMixin"
   ],
   "client": [
-    "AbstractClientPlayerMixin",
     "GameRendererMixin",
     "ItemRendererMixin",
     "KeyboardHandlerMixin",
     "ModelLoaderMixin",
+    "PlayerInfoMixin",
+    "SkinCustomizationScreenMixin",
     "TerrainParticleMixin"
   ],
   "server": [],

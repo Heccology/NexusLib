@@ -18,7 +18,13 @@
     "entrypoints": {
         "main": [
             "net.hecco.nexuslib.NexusLibFabric"
-        ]
+        ],
+      "client": [
+        "net.hecco.nexuslib.NexusLibFabricClient"
+      ],
+      "fabric-datagen": [
+        "net.hecco.nexuslib.NexusLibFabricDatagen"
+      ]
     },
     "mixins": [
         "${mod_id}.mixins.json",
