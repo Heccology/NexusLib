@@ -151,6 +151,63 @@ public final class NLCapeManager {
         add(UUID.fromString("f1df9144-dbd9-413b-bd10-1f92f409c622"), //EnderKTS
                 cape("subterrous")
         );
+        add(UUID.fromString("64420135-651e-4219-97d0-c2c80eab9046"), //thenatezi11a
+                cape("subterrous")
+        );
+        add(UUID.fromString("d99f4d54-7301-4952-85a5-f2844ad608d6"), //Derp_gamer22
+                cape("subterrous")
+        );
+        add(UUID.fromString("aa2f9826-4137-4f77-8817-7bc37d2f0cf7"), //cucuber_321
+                cape("subterrous")
+        );
+        add(UUID.fromString("24f93698-b326-4c4d-991d-24c424438a1d"), //estarlightp
+                cape("subterrous")
+        );
+        add(UUID.fromString("054cc975-2e89-4071-b27d-bb955ff48585"), //Grae2016
+                cape("subterrous")
+        );
+        add(UUID.fromString("b80e0524-dd94-4246-a611-d4ab81e7647d"), //Soul_bolt
+                cape("subterrous")
+        );
+        add(UUID.fromString("90d46a0f-0154-410c-9f78-4ff2c8d0780a"), //Sp71ng
+                cape("subterrous")
+        );
+        add(UUID.fromString("e5f583c3-c3ea-4131-86b8-da100024c035"), //Simeeow
+                cape("subterrous")
+        );
+        add(UUID.fromString("eed3424a-d3a1-412f-8664-e528da458139"), //HatsuneTreeku
+                cape("subterrous")
+        );
+        add(UUID.fromString("348bdf55-217e-4b47-80e7-1615172726df"), //TancrebitPC
+                cape("subterrous")
+        );
+        add(UUID.fromString("08e81c68-0a2f-4625-882b-ddcf3c86e351"), //astralverdance
+                cape("subterrous")
+        );
+        add(UUID.fromString("5a603688-39ea-46e5-a368-529d98c32363"), //FilenameInfinity
+                cape("subterrous")
+        );
+        add(UUID.fromString("ea114f80-3cec-4abb-b904-0d20716cb2d4"), //P_Mania
+                cape("subterrous")
+        );
+        add(UUID.fromString("a7727c38-0417-4314-8d31-95b4354a3ced"), //LEM0N4643
+                cape("subterrous")
+        );
+        add(UUID.fromString("83dfce82-3f69-4ae8-b661-4c2e6e0b7f6f"), //miloq__
+                cape("subterrous")
+        );
+        add(UUID.fromString("f1aafe5c-4c4c-4287-9f14-dfda7f51750f"), //gnorki
+                cape("subterrous")
+        );
+        add(UUID.fromString("e8bedbca-9ae2-44a1-8bca-1d50e1323bdc"), //Minecraft_F4N
+                cape("subterrous")
+        );
+        add(UUID.fromString("d9a83ea1-d639-4164-8477-77c3c51062c0"), //TentenSwift
+                cape("subterrous")
+        );
+        add(UUID.fromString("20b286e7-c271-442f-a0b2-ecae09575d30"), //AnoKonstella
+                cape("subterrous")
+        );
 
         load();
     }
