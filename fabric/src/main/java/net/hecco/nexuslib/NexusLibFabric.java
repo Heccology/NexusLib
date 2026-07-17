@@ -1,13 +1,14 @@
 package net.hecco.nexuslib;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.hecco.nexuslib.lib.cape.CapePayloadHandler;
 import net.hecco.nexuslib.lib.cape.SetCapePacket;
 import net.hecco.nexuslib.lib.cape.SyncCapePacket;
@@ -15,11 +16,9 @@ import net.hecco.nexuslib.lib.loader_agnostic.commandRegistry.NLCommandRegistry;
 import net.hecco.nexuslib.lib.util.NLCapeManager;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
-import net.minecraft.world.entity.Entity;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -31,7 +30,9 @@ public class NexusLibFabric implements ModInitializer {
         NexusLib.init();
 
         CapePayloadHandler.register();
-        ClientPlayNetworking.registerGlobalReceiver(SyncCapePacket.TYPE, SyncCapePacket::handle);
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            ClientPlayNetworking.registerGlobalReceiver(SyncCapePacket.TYPE, SyncCapePacket::handle);
+        }
         ServerPlayNetworking.registerGlobalReceiver(SetCapePacket.TYPE, SetCapePacket::handle);
         ServerPlayConnectionEvents.JOIN.register(this::joinServerEvent);
 
