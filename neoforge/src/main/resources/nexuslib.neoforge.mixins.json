@@ -4,6 +4,7 @@
   "package": "net.hecco.nexuslib.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "LiquidBlockMixin"
   ],
   "client": [
   ],
