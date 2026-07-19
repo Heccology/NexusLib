@@ -11,6 +11,7 @@
     "FeatureElementMixin",
     "FireBlockSetFlammableInvoker",
     "HoeItemMixin",
+    "PointedDripstoneBlockMixin",
     "ShovelItemMixin",
     "WolfVariantsMixin"
   ],

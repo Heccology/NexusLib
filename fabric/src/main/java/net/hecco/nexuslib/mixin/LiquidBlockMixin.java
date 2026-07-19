@@ -1,9 +1,8 @@
 package net.hecco.nexuslib.mixin;
 
-import net.hecco.nexuslib.lib.loader_agnostic.fluidInteractionRegistry.NLFluidInteractionRegistry;
+import net.hecco.nexuslib.lib.fluidInteractionRegistry.NLFluidInteractionRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;

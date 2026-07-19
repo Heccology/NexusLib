@@ -1,4 +1,4 @@
-package net.hecco.nexuslib.lib.loader_agnostic.fluidInteractionRegistry;
+package net.hecco.nexuslib.lib.fluidInteractionRegistry;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
