@@ -24,9 +24,9 @@ public abstract class NLModelProvider extends FabricModelProvider {
         this.MOD_ID = modId;
     }
 
-    public void generateBlockFamilyModels(BlockModelGenerators blockStateModelGenerator) {
+    public void generateBlockFamilyModels(BlockModelGenerators blockStateModelGenerator, boolean ofThisMod) {
         for (BlockFamilyCreator blockFamily : BlockFamilyCreator.BLOCK_FAMILIES.values()) {
-            if (blockFamily.isOfMod(this.MOD_ID)) {
+            if (!ofThisMod || blockFamily.isOfMod(this.MOD_ID)) {
                 for (Supplier<Block> block : blockFamily.CUBE) {
                     blockStateModelGenerator.createTrivialCube(block.get());
                 }

@@ -66,6 +66,11 @@ public final class NLCapeManager {
                 cape("feldspar")
         );
 
+        add(UUID.fromString("4d5b5fa4-684c-4c3a-8154-a8ad8f13fcd4"), //SirPancakess
+                cape("subterrous"),
+                cape("subterrous_super")
+        );
+
         add(UUID.fromString("32290fa8-77ed-4794-9cba-25c09e7f4e1d"), //Diemond_Player
                 cape("bountifulfares"),
                 cape("bountifulfares_super"),
