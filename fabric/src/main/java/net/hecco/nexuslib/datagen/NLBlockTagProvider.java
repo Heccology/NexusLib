@@ -20,9 +20,9 @@ public abstract class NLBlockTagProvider extends FabricTagProvider.BlockTagProvi
         this.MOD_ID = modId;
     }
 
-    public void generateBlockFamilyBlockTags() {
+    public void generateBlockFamilyBlockTags(boolean ofThisMod) {
         for (BlockFamilyCreator blockFamily : BlockFamilyCreator.BLOCK_FAMILIES.values()) {
-            if (blockFamily.isOfMod(this.MOD_ID)) {
+            if (!ofThisMod || blockFamily.isOfMod(this.MOD_ID)) {
                 for (Supplier<Block> block : blockFamily.WALLS) {
                     getOrCreateTagBuilder(BlockTags.WALLS).add(block.get());
                 }
@@ -73,23 +73,37 @@ public abstract class NLBlockTagProvider extends FabricTagProvider.BlockTagProvi
                 }
                 for (TagKey<Block> tag : blockFamily.FLAMMABLE_LOG_TAGS) {
                     String name = tag.location().getPath().replace("_logs", "");
+                    Supplier<Block> wood = blockFamily.getBlock(name + "_wood");
+                    Supplier<Block> strippedWood = blockFamily.getBlock("stripped_" + name + "_wood");
+
+                    if (wood == null || strippedWood == null) {
+                        wood = blockFamily.getBlock(name);
+                        strippedWood = blockFamily.getBlock("stripped_" + name);
+                    }
+
                     getOrCreateTagBuilder(tag)
                             .add(blockFamily.getBlock(name + "_log").get())
-                            .add(blockFamily.getBlock(name + "_wood").get())
+                            .add(wood.get())
                             .add(blockFamily.getBlock("stripped_" + name + "_log").get())
-                            .add(blockFamily.getBlock("stripped_" + name + "_wood").get())
-                    ;
+                            .add(strippedWood.get());
                     getOrCreateTagBuilder(BlockTags.LOGS_THAT_BURN).addTag(tag);
                 }
                 for (TagKey<Block> tag : blockFamily.LOG_TAGS) {
                     String name = tag.location().getPath().replace("_logs", "");
+                    Supplier<Block> wood = blockFamily.getBlock(name + "_wood");
+                    Supplier<Block> strippedWood = blockFamily.getBlock("stripped_" + name + "_wood");
+
+                    if (wood == null || strippedWood == null) {
+                        wood = blockFamily.getBlock(name);
+                        strippedWood = blockFamily.getBlock("stripped_" + name);
+                    }
+
                     getOrCreateTagBuilder(tag)
                             .add(blockFamily.getBlock(name + "_log").get())
-                            .add(blockFamily.getBlock(name + "_wood").get())
+                            .add(wood.get())
                             .add(blockFamily.getBlock("stripped_" + name + "_log").get())
-                            .add(blockFamily.getBlock("stripped_" + name + "_wood").get())
-                    ;
-                    getOrCreateTagBuilder(BlockTags.LOGS).addTag(tag);
+                            .add(strippedWood.get());
+                    getOrCreateTagBuilder(BlockTags.LOGS_THAT_BURN).addTag(tag);
                 }
                 for (Supplier<Block> block : blockFamily.OVERWORLD_NATURAL_LOGS) {
                     getOrCreateTagBuilder(BlockTags.OVERWORLD_NATURAL_LOGS).add(block.get());

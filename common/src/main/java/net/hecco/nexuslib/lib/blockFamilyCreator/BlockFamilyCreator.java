@@ -14,10 +14,8 @@ import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class BlockFamilyCreator {
@@ -47,6 +45,7 @@ public class BlockFamilyCreator {
     public final ArrayList<Supplier<Block>> WOODEN_BUTTONS = new ArrayList<>();
     public final ArrayList<Supplier<Block>> STONE_BUTTONS = new ArrayList<>();
     public final ArrayList<Supplier<Block>> LOGS = new ArrayList<>();
+    public final Map<Supplier<Block>, Supplier<Block>> LOGS_TO_WOODS = new HashMap<>();
     public final ArrayList<Supplier<Block>> LEAVES = new ArrayList<>();
     public final ArrayList<Supplier<Block>> FLOWERS = new ArrayList<>();
     public final ArrayList<Supplier<Block>> SAPLINGS = new ArrayList<>();
@@ -73,18 +72,18 @@ public class BlockFamilyCreator {
     public final ArrayList<Supplier<Block>> NEEDS_IRON_TOOL = new ArrayList<>();
     public final ArrayList<Supplier<Block>> NEEDS_DIAMOND_TOOL = new ArrayList<>();
 
-    private String modId;
-    private String name;
-    private String prefix = "";
-    private String suffix = "";
-    private Mineables mineables = Mineables.NONE;
-    private MinMiningToolTier minMiningToolTier = MinMiningToolTier.NONE;
-    private Supplier<BlockBehaviour.Properties> properties;
+    protected String modId;
+    protected String name;
+    protected String prefix = "";
+    protected String suffix = "";
+    protected Mineables mineables = Mineables.NONE;
+    protected MinMiningToolTier minMiningToolTier = MinMiningToolTier.NONE;
+    protected Supplier<BlockBehaviour.Properties> properties;
 
-    private Supplier<Block> currentBlock;
-    private boolean generateModel = true;
+    protected Supplier<Block> currentBlock;
+    protected boolean generateModel = true;
 
-    private String currentRecipeGroup = "";
+    protected String currentRecipeGroup = "";
 
 
     public final Map<String, Supplier<Block>> blockFamilyBlocks = new HashMap<>();
@@ -172,7 +171,7 @@ public class BlockFamilyCreator {
         return this;
     }
 
-    private Supplier<Block> createBlockType(String prefix, String suffix, String name) {
+    protected Supplier<Block> createBlockType(String prefix, String suffix, String name) {
         Supplier<Block> block = registerBlock((prefix != "" ? prefix + "_" : "") + name + (suffix != "" ? "_" + suffix : ""), () -> new Block(properties.get()));
         this.prefix = prefix == "" ? "" : prefix + "_";
         this.suffix = suffix == "" ? "" : "_" + (suffix.substring(suffix.length() - 1) == "s" ? suffix.replace(suffix.substring(suffix.length()-1), "") : suffix);
@@ -251,14 +250,14 @@ public class BlockFamilyCreator {
         return this;
     }
 
-    public BlockFamilyCreator logs(boolean burnable, boolean overworld) {
+    public BlockFamilyCreator logs(boolean burnable, boolean overworld, boolean woodSuffix) {
         Supplier<Block> log = registerBlock(name + "_log", () -> new RotatedPillarBlock(this.properties.get()));
 
         Supplier<Block> strippedLog = registerBlock("stripped_" + name + "_log", () -> new RotatedPillarBlock(this.properties.get()));
 
-        Supplier<Block> wood = registerBlock(name + "_wood", () -> new RotatedPillarBlock(this.properties.get()));
+        Supplier<Block> wood = registerBlock(name + (woodSuffix ? "_wood" : ""), () -> new RotatedPillarBlock(this.properties.get()));
 
-        Supplier<Block> strippedWood = registerBlock("stripped_" + name + "_wood", () -> new RotatedPillarBlock(this.properties.get()));
+        Supplier<Block> strippedWood = registerBlock("stripped_" + name + (woodSuffix ? "_wood" : ""), () -> new RotatedPillarBlock(this.properties.get()));
 
         if (burnable) {
             FLAMMABLE_LOG_TAGS.add(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(this.modId, this.name + "_logs")));
@@ -271,6 +270,8 @@ public class BlockFamilyCreator {
             OVERWORLD_NATURAL_LOGS.add(log);
         }
         LOGS.add(log);
+        LOGS_TO_WOODS.put(log, wood);
+        LOGS_TO_WOODS.put(strippedLog, strippedWood);
         STRIPPABLE.put(wood, strippedWood);
         STRIPPABLE.put(log, strippedLog);
 
@@ -351,8 +352,7 @@ public class BlockFamilyCreator {
         return this;
     }
 
-    @SafeVarargs
-    public final BlockFamilyCreator addExistingBlock(String id, Supplier<Block> block, Mineables mineables, MinMiningToolTier minMiningToolTier, ArrayList<Supplier<Block>>... tags) {
+    public final BlockFamilyCreator addExistingBlock(String id, Supplier<Block> block, Mineables mineables, MinMiningToolTier minMiningToolTier, Function<BlockFamilyCreator, List<ArrayList<Supplier<Block>>>> tags) {
         BLOCKS.put(id, block);
         this.blockFamilyBlocks.put(id, block);
         switch (mineables) {
@@ -366,7 +366,7 @@ public class BlockFamilyCreator {
             case IRON -> NEEDS_IRON_TOOL.add(block);
             case DIAMOND -> NEEDS_DIAMOND_TOOL.add(block);
         }
-        for (ArrayList<Supplier<Block>> tag : tags) {
+        for (ArrayList<Supplier<Block>> tag : tags.apply(this)) {
             tag.add(block);
         }
         VARIANT_TO_BASE_BLOCK.put(block, currentBlock);

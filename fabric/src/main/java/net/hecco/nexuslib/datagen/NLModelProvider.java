@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FlowerPotBlock;
 
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -51,9 +52,8 @@ public abstract class NLModelProvider extends FabricModelProvider {
                 for (Supplier<Block> block : blockFamily.FENCE_GATES) {
                     fenceGate(blockStateModelGenerator, block.get(), blockFamily.VARIANT_TO_BASE_BLOCK.get(block).get());
                 }
-                for (Supplier<Block> block : blockFamily.LOGS) {
-                    blockStateModelGenerator.woodProvider(block.get()).log(block.get()).wood(blockFamily.getBlock(BuiltInRegistries.BLOCK.getKey(block.get()).getPath().replace("log", "wood")).get());
-                    blockStateModelGenerator.woodProvider(blockFamily.STRIPPABLE.get(block).get()).log(blockFamily.STRIPPABLE.get(block).get()).wood(blockFamily.STRIPPABLE.get(blockFamily.getBlock(BuiltInRegistries.BLOCK.getKey(block.get()).getPath().replace("log", "wood"))).get());
+                for (Map.Entry<Supplier<Block>, Supplier<Block>> logAndWood : blockFamily.LOGS_TO_WOODS.entrySet()) {
+                    blockStateModelGenerator.woodProvider(logAndWood.getKey().get()).log(logAndWood.getKey().get()).wood(logAndWood.getValue().get());
                 }
                 for (Supplier<Block> block : Stream.concat(blockFamily.WOODEN_DOORS.stream(), blockFamily.DOORS.stream()).toList()) {
                     blockStateModelGenerator.createDoor(block.get());

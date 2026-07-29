@@ -21,9 +21,9 @@ public abstract class NLItemTagProvider extends FabricTagProvider.ItemTagProvide
         this.MOD_ID = modId;
     }
 
-    public void generateBlockFamilyItemTags() {
+    public void generateBlockFamilyItemTags(boolean ofThisMod) {
         for (BlockFamilyCreator blockFamily : BlockFamilyCreator.BLOCK_FAMILIES.values()) {
-            if (blockFamily.isOfMod(this.MOD_ID)) {
+            if (!ofThisMod || blockFamily.isOfMod(this.MOD_ID)) {
                 for (Supplier<Block> block : blockFamily.WALLS) {
                     getOrCreateTagBuilder(ItemTags.WALLS).add(block.get().asItem());
                 }
@@ -68,22 +68,36 @@ public abstract class NLItemTagProvider extends FabricTagProvider.ItemTagProvide
                 }
                 for (TagKey<Item> tag : blockFamily.FLAMMABLE_LOG_ITEM_TAGS) {
                     String name = tag.location().getPath().replace("_logs", "");
+                    Supplier<Block> wood = blockFamily.getBlock(name + "_wood");
+                    Supplier<Block> strippedWood = blockFamily.getBlock("stripped_" + name + "_wood");
+
+                    if (wood == null || strippedWood == null) {
+                        wood = blockFamily.getBlock(name);
+                        strippedWood = blockFamily.getBlock("stripped_" + name);
+                    }
+
                     getOrCreateTagBuilder(tag)
                             .add(blockFamily.getBlock(name + "_log").get().asItem())
-                            .add(blockFamily.getBlock(name + "_wood").get().asItem())
+                            .add(wood.get().asItem())
                             .add(blockFamily.getBlock("stripped_" + name + "_log").get().asItem())
-                            .add(blockFamily.getBlock("stripped_" + name + "_wood").get().asItem())
-                    ;
+                            .add(strippedWood.get().asItem());
                     getOrCreateTagBuilder(ItemTags.LOGS_THAT_BURN).addTag(tag);
                 }
                 for (TagKey<Item> tag : blockFamily.LOG_ITEM_TAGS) {
                     String name = tag.location().getPath().replace("_logs", "");
+                    Supplier<Block> wood = blockFamily.getBlock(name + "_wood");
+                    Supplier<Block> strippedWood = blockFamily.getBlock("stripped_" + name + "_wood");
+
+                    if (wood == null || strippedWood == null) {
+                        wood = blockFamily.getBlock(name);
+                        strippedWood = blockFamily.getBlock("stripped_" + name);
+                    }
+
                     getOrCreateTagBuilder(tag)
                             .add(blockFamily.getBlock(name + "_log").get().asItem())
-                            .add(blockFamily.getBlock(name + "_wood").get().asItem())
+                            .add(wood.get().asItem())
                             .add(blockFamily.getBlock("stripped_" + name + "_log").get().asItem())
-                            .add(blockFamily.getBlock("stripped_" + name + "_wood").get().asItem())
-                    ;
+                            .add(strippedWood.get().asItem());
                     getOrCreateTagBuilder(ItemTags.LOGS).addTag(tag);
                 }
                 for (Supplier<Block> block : blockFamily.LEAVES) {
