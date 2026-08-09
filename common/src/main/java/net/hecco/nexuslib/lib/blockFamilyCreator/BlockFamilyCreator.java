@@ -60,9 +60,7 @@ public class BlockFamilyCreator {
     public final ArrayList<Supplier<Block>> FOLIAGE_TINTED = new ArrayList<>();
 
     public final ArrayList<Supplier<Block>> CUBE = new ArrayList<>();
-    public final ArrayList<Supplier<Block>> STAIRS_MODEL = new ArrayList<>();
-    public final ArrayList<Supplier<Block>> SLAB_MODEL = new ArrayList<>();
-    public final ArrayList<Supplier<Block>> WALL_MODEL = new ArrayList<>();
+    public final ArrayList<Supplier<Block>> DEFAULT_MODEL = new ArrayList<>();
 
     public final ArrayList<Supplier<Block>> PICKAXE_MINEABLE = new ArrayList<>();
     public final ArrayList<Supplier<Block>> AXE_MINEABLE = new ArrayList<>();
@@ -210,7 +208,7 @@ public class BlockFamilyCreator {
         Supplier<Block> block = registerBlock(prefix + name + suffix + "_stairs", () -> new PublicStairBlock(this.currentBlock.get().defaultBlockState(), this.properties.get()));
         STAIRS.add(block);
         if (this.generateModel) {
-            STAIRS_MODEL.add(block);
+            DEFAULT_MODEL.add(block);
         }
         return this;
     }
@@ -219,7 +217,7 @@ public class BlockFamilyCreator {
         Supplier<Block> block = registerBlock(prefix + name + suffix + "_slab", () -> new SlabBlock(this.properties.get()));
         SLABS.add(block);
         if (this.generateModel) {
-            SLAB_MODEL.add(block);
+            DEFAULT_MODEL.add(block);
         }
         return this;
     }
@@ -228,7 +226,7 @@ public class BlockFamilyCreator {
         Supplier<Block> block = registerBlock(prefix + name + suffix + "_wall", () -> new WallBlock(this.properties.get()));
         WALLS.add(block);
         if (this.generateModel) {
-            WALL_MODEL.add(block);
+            DEFAULT_MODEL.add(block);
         }
         return this;
     }
@@ -250,7 +248,7 @@ public class BlockFamilyCreator {
         return this;
     }
 
-    public BlockFamilyCreator logs(boolean burnable, boolean overworld, boolean woodSuffix) {
+    public BlockFamilyCreator logs(boolean burnable, boolean overworld, boolean woodSuffix, boolean generateLogModels, boolean generateStrippedModels) {
         Supplier<Block> log = registerBlock(name + "_log", () -> new RotatedPillarBlock(this.properties.get()));
 
         Supplier<Block> strippedLog = registerBlock("stripped_" + name + "_log", () -> new RotatedPillarBlock(this.properties.get()));
@@ -274,7 +272,14 @@ public class BlockFamilyCreator {
         LOGS_TO_WOODS.put(strippedLog, strippedWood);
         STRIPPABLE.put(wood, strippedWood);
         STRIPPABLE.put(log, strippedLog);
-
+        if (generateLogModels) {
+            DEFAULT_MODEL.add(log);
+            DEFAULT_MODEL.add(wood);
+        }
+        if (generateStrippedModels) {
+            DEFAULT_MODEL.add(strippedLog);
+            DEFAULT_MODEL.add(strippedWood);
+        }
         return this;
     }
 

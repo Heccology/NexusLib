@@ -32,17 +32,17 @@ public abstract class NLModelProvider extends FabricModelProvider {
                     blockStateModelGenerator.createTrivialCube(block.get());
                 }
                 for (Supplier<Block> block : blockFamily.STAIRS) {
-                    if (blockFamily.STAIRS_MODEL.contains(block)) {
+                    if (blockFamily.DEFAULT_MODEL.contains(block)) {
                         stairs(blockStateModelGenerator, block.get(), blockFamily.VARIANT_TO_BASE_BLOCK.get(block).get());
                     }
                 }
                 for (Supplier<Block> block : blockFamily.SLABS) {
-                    if (blockFamily.SLAB_MODEL.contains(block)) {
+                    if (blockFamily.DEFAULT_MODEL.contains(block)) {
                         slab(blockStateModelGenerator, block.get(), blockFamily.VARIANT_TO_BASE_BLOCK.get(block).get());
                     }
                 }
                 for (Supplier<Block> block : blockFamily.WALLS) {
-                    if (blockFamily.WALL_MODEL.contains(block)) {
+                    if (blockFamily.DEFAULT_MODEL.contains(block)) {
                         wall(blockStateModelGenerator, block.get(), blockFamily.VARIANT_TO_BASE_BLOCK.get(block).get());
                     }
                 }
@@ -53,7 +53,9 @@ public abstract class NLModelProvider extends FabricModelProvider {
                     fenceGate(blockStateModelGenerator, block.get(), blockFamily.VARIANT_TO_BASE_BLOCK.get(block).get());
                 }
                 for (Map.Entry<Supplier<Block>, Supplier<Block>> logAndWood : blockFamily.LOGS_TO_WOODS.entrySet()) {
-                    blockStateModelGenerator.woodProvider(logAndWood.getKey().get()).log(logAndWood.getKey().get()).wood(logAndWood.getValue().get());
+                    if (blockFamily.DEFAULT_MODEL.contains(logAndWood.getKey())) {
+                        blockStateModelGenerator.woodProvider(logAndWood.getKey().get()).log(logAndWood.getKey().get()).wood(logAndWood.getValue().get());
+                    }
                 }
                 for (Supplier<Block> block : Stream.concat(blockFamily.WOODEN_DOORS.stream(), blockFamily.DOORS.stream()).toList()) {
                     blockStateModelGenerator.createDoor(block.get());
