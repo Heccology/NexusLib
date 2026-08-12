@@ -166,6 +166,7 @@ public class BlockFamilyCreator {
         Supplier<Block> block = createBlockType("", "planks", this.name);
         updateAffixes("", "");
         this.PLANKS.add(block);
+        this.AXE_MINEABLE.add(block);
         return this;
     }
 
