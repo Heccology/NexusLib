@@ -213,6 +213,12 @@ public final class NLCapeManager {
         add(UUID.fromString("20b286e7-c271-442f-a0b2-ecae09575d30"), //AnoKonstella
                 cape("subterrous")
         );
+        add(UUID.fromString("7d3a5f6e-ac22-43d8-8c9f-863c6f4ded1c"), //hatsondogs
+                cape("subterrous")
+        );
+        add(UUID.fromString("f09e6351-0b45-4bc8-bc80-48cbc64ad07e"), //MC_Polaris
+                cape("subterrous")
+        );
 
         load();
     }
