@@ -20,7 +20,7 @@ public class NLParticleRenderTypes {
         }
 
         public String toString() {
-            return "SUBTERROUS_PARTICLE_SHEET_CLOUD";
+            return "NEXUSLIB_PARTICLE_SHEET_CLOUD";
         }
     };
 }

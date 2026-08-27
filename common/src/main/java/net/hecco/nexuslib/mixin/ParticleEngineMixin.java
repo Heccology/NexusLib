@@ -7,6 +7,9 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +21,11 @@ public class ParticleEngineMixin {
     @Mutable
     private static List<ParticleRenderType> RENDER_ORDER;
 
-    static {
-        RENDER_ORDER = new ArrayList<>(RENDER_ORDER);
-        RENDER_ORDER.add(NLParticleRenderTypes.PARTICLE_SHEET_CLOUD);
+    @Inject(method = "<clinit>", at = @At("TAIL"))
+    private static void nexuslib$addParticleRenderTypes(CallbackInfo ci) {
+        List<ParticleRenderType> order = new ArrayList<>(RENDER_ORDER);
+        int customIndex = order.indexOf(ParticleRenderType.CUSTOM);
+        order.add(customIndex, NLParticleRenderTypes.PARTICLE_SHEET_CLOUD);
+        RENDER_ORDER = order;
     }
 }

@@ -8,7 +8,6 @@
     "LiquidBlockMixin"
   ],
   "client": [
-    "ParticleEngineMixin"
   ],
   "server": [],
   "injectors": {
