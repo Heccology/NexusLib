@@ -2,6 +2,7 @@ package net.hecco.nexuslib.platform.services;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.serialization.MapCodec;
+import net.hecco.nexuslib.lib.util.ItemGroupAddition;
 import net.hecco.nexuslib.mixin.FireBlockSetFlammableInvoker;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.core.BlockPos;
@@ -46,6 +47,7 @@ import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -132,7 +134,7 @@ public interface NLRegistryHelper {
         }
     }
 
-    void addItemsToItemGroup(ResourceKey<CreativeModeTab> tab, ArrayList<Pair<ItemLike, ItemStack>> items);
+    void addItemsToItemGroup(ResourceKey<CreativeModeTab> tab, ArrayList<ItemGroupAddition> items);
 
     void registerBuiltInResourcepack(String modId, String packId, String displayName, boolean required, boolean enabledByDefault);
 

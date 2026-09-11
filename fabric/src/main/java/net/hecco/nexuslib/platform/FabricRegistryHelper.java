@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.hecco.nexuslib.lib.util.ItemGroupAddition;
 import net.hecco.nexuslib.platform.services.NLRegistryHelper;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
@@ -178,11 +179,21 @@ public class FabricRegistryHelper implements NLRegistryHelper {
     }
 
     @Override
-    public void addItemsToItemGroup(ResourceKey<CreativeModeTab> tab, ArrayList<Pair<ItemLike, ItemStack>> items) {
+    public void addItemsToItemGroup(ResourceKey<CreativeModeTab> tab, ArrayList<ItemGroupAddition> items) {
         ItemGroupEvents.modifyEntriesEvent(tab).register(entries -> {
-                    for (Pair<ItemLike, ItemStack> entry : items) {
-                        entries.addAfter(entry.getA(), entry.getB());
-                    }
+                    items.forEach(addition -> {
+                        switch (addition.type()) {
+                            case ADD_AFTER -> {
+                                if (addition.origin().isEmpty()) throw new NullPointerException("Origin item for ADD_AFTER addition type cannot be empty!");
+                                entries.addAfter(addition.origin().get().asItem().getDefaultInstance(), addition.stack());
+                            }
+                            case ADD_BEFORE -> {
+                                if (addition.origin().isEmpty()) throw new NullPointerException("Origin item for ADD_BEFORE addition type cannot be empty!");
+                                entries.addBefore(addition.origin().get().asItem().getDefaultInstance(), addition.stack());
+                            }
+                            case ADD_LAST -> entries.accept(addition.stack());
+                        }
+                    });
                 });
     }
 

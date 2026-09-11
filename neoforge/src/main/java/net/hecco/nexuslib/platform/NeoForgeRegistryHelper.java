@@ -2,6 +2,7 @@ package net.hecco.nexuslib.platform;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.serialization.MapCodec;
+import net.hecco.nexuslib.lib.util.ItemGroupAddition;
 import net.hecco.nexuslib.platform.services.NLRegistryHelper;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
@@ -336,10 +337,22 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
 
 
     @Override
-    public void addItemsToItemGroup(ResourceKey<CreativeModeTab> tab, ArrayList<Pair<ItemLike, ItemStack>> items) {
+    public void addItemsToItemGroup(ResourceKey<CreativeModeTab> tab, ArrayList<ItemGroupAddition> items) {
         this.eventBus.addListener((BuildCreativeModeTabContentsEvent event) -> {
             if (event.getTabKey() == tab) {
-                items.forEach(pair -> event.insertAfter(pair.getA().asItem().getDefaultInstance(), pair.getB(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS));
+                items.forEach(addition -> {
+                    switch (addition.type()) {
+                        case ADD_AFTER -> {
+                            if (addition.origin().isEmpty()) throw new NullPointerException("Origin item for ADD_AFTER addition type cannot be empty!");
+                            event.insertAfter(addition.origin().get().asItem().getDefaultInstance(), addition.stack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                        }
+                        case ADD_BEFORE -> {
+                            if (addition.origin().isEmpty()) throw new NullPointerException("Origin item for ADD_BEFORE addition type cannot be empty!");
+                            event.insertBefore(addition.origin().get().asItem().getDefaultInstance(), addition.stack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                        }
+                        case ADD_LAST -> event.accept(addition.stack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                    }
+                });
             }
         });
     }
