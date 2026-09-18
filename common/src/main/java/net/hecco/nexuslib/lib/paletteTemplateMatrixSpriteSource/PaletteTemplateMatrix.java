@@ -33,8 +33,6 @@ import java.util.function.Supplier;
 
 public class PaletteTemplateMatrix implements SpriteSource {
 
-    public static final SpriteSourceType PALETTE_TEMPLATE_MATRIX = new SpriteSourceType(PaletteTemplateMatrix.CODEC);
-
     public static final MapCodec<PaletteTemplateMatrix> CODEC = RecordCodecBuilder.mapCodec(
             (p_266838_) -> p_266838_.group(
                     ResourceLocation.CODEC.fieldOf("id").forGetter((p_267300_) -> p_267300_.id),
@@ -206,7 +204,7 @@ public class PaletteTemplateMatrix implements SpriteSource {
 
     @Override
     public @NotNull SpriteSourceType type() {
-        return PALETTE_TEMPLATE_MATRIX;
+        return NLSpriteSources.PALETTE_TEMPLATE_MATRIX;
     }
 
     record PaletteTemplateSpriteSupplier(LazyLoadedImage baseImage, Supplier<IntUnaryOperator> palette, ResourceLocation permutationLocation) implements SpriteSource.SpriteSupplier {

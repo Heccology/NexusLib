@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.AtlasSourceTypeRegistry;
 import net.hecco.nexuslib.lib.cape.SetCapePacket;
 import net.hecco.nexuslib.lib.cape.SyncCapePacket;
+import net.hecco.nexuslib.lib.paletteTemplateMatrixSpriteSource.NLSpriteSources;
 import net.hecco.nexuslib.lib.paletteTemplateMatrixSpriteSource.PaletteTemplateMatrix;
 import net.hecco.nexuslib.lib.util.NLCapeManager;
 
@@ -21,7 +22,7 @@ public class NexusLibFabricClient implements ClientModInitializer {
 
         AtlasSourceTypeRegistry.register(
                 NexusLib.id("palette_template_matrix"),
-                PaletteTemplateMatrix.PALETTE_TEMPLATE_MATRIX
+                NLSpriteSources.PALETTE_TEMPLATE_MATRIX
         );
     }
 }
