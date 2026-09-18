@@ -4,6 +4,7 @@ import com.google.common.base.Suppliers;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.datafixers.util.Function4;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
@@ -132,8 +133,9 @@ public class PaletteTemplateMatrix implements SpriteSource {
                 }
                 String rawDefinition = json.get("definition").getAsString();
                 ResourceLocation definition = ResourceLocation.parse(rawDefinition);
-
-                paletteLocations.put(definition, paletteLocation);
+                if (shouldDiscover(PTMEvents.PALETTE_DISCOVERY_CONDITIONS, entry.getKey(), paletteLocation, json)) {
+                    paletteLocations.put(definition, paletteLocation);
+                }
 
                 for (TriConsumer<ResourceLocation, ResourceLocation, JsonObject> consumer : PTMEvents.ON_PALETTE_DISCOVERY) {
                     try {
@@ -145,6 +147,16 @@ public class PaletteTemplateMatrix implements SpriteSource {
             }
         }
         return paletteLocations;
+    }
+
+    private boolean shouldDiscover(List<Function4<ResourceLocation, ResourceLocation, ResourceLocation, JsonObject, Boolean>> conditions, ResourceLocation providerLocation, ResourceLocation paletteLocation, JsonObject json) {
+        for (Function4<ResourceLocation, ResourceLocation, ResourceLocation, JsonObject, Boolean> function : conditions) {
+            try {
+                boolean i = function.apply(this.id, providerLocation, paletteLocation, json);
+                if (!i) return false;
+            } catch (Exception ignored) {}
+        }
+        return true;
     }
 
     private List<ResourceLocation> discoverTemplateLocations(ResourceManager resourceManager) {
@@ -164,7 +176,10 @@ public class PaletteTemplateMatrix implements SpriteSource {
                 }
                 String raw = json.get("template_location").getAsString();
                 ResourceLocation templateLocation = ResourceLocation.parse(raw);
-                templateLocations.add(templateLocation);
+
+                if (shouldDiscover(PTMEvents.TEMPLATE_DISCOVERY_CONDITIONS, entry.getKey(), templateLocation, json)) {
+                    templateLocations.add(templateLocation);
+                }
 
                 for (TriConsumer<ResourceLocation, ResourceLocation, JsonObject> consumer : PTMEvents.ON_TEMPLATE_DISCOVERY) {
                     try {
