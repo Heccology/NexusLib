@@ -15,7 +15,7 @@ public class NexusLib {
         NLUntintedParticleRegistry.add(Blocks.POTTED_FERN); //Fixed your game mojang hehahehaw
     }
 
-    public static ResourceLocation modid(String id) {
+    public static ResourceLocation id(String id) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, id);
     }
 }

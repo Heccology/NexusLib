@@ -3,8 +3,10 @@ package net.hecco.nexuslib;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.rendering.v1.AtlasSourceTypeRegistry;
 import net.hecco.nexuslib.lib.cape.SetCapePacket;
 import net.hecco.nexuslib.lib.cape.SyncCapePacket;
+import net.hecco.nexuslib.lib.paletteTemplateMatrixSpriteSource.PaletteTemplateMatrix;
 import net.hecco.nexuslib.lib.util.NLCapeManager;
 
 public class NexusLibFabricClient implements ClientModInitializer {
@@ -16,5 +18,10 @@ public class NexusLibFabricClient implements ClientModInitializer {
             if (client.player == null) return;
             ClientPlayNetworking.send(new SetCapePacket(NLCapeManager.getSelected(client.player.getUUID())));
         }));
+
+        AtlasSourceTypeRegistry.register(
+                NexusLib.id("palette_template_matrix"),
+                PaletteTemplateMatrix.PALETTE_TEMPLATE_MATRIX
+        );
     }
 }

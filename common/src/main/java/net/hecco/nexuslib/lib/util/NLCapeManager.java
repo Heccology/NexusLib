@@ -224,7 +224,7 @@ public final class NLCapeManager {
     }
 
     private static ResourceLocation cape(String id) {
-        ResourceLocation texture = NexusLib.modid("textures/capes/" + id + ".png");
+        ResourceLocation texture = NexusLib.id("textures/capes/" + id + ".png");
         NAMES.put(texture, "nexuslib.cape." + id);
         return texture;
     }
