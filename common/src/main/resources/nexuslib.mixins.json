@@ -19,6 +19,7 @@
     "GameRendererMixin",
     "ItemRendererMixin",
     "KeyboardHandlerMixin",
+    "MinecraftMixin",
     "ModelLoaderMixin",
     "ParticleEngineMixin",
     "PlayerInfoMixin",
