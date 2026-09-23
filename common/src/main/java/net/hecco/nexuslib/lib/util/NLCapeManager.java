@@ -133,6 +133,7 @@ public final class NLCapeManager {
                 cape("subterrous")
         );
         add(UUID.fromString("f1ec4cf4-584e-4b5b-a59a-fcfdf4a8bba1"), //kemiu
+                cape("bountifulfares"),
                 cape("subterrous")
         );
         add(UUID.fromString("692bc640-c258-4a9c-8a71-bc1e773083ac"), //chlowey_

@@ -2,6 +2,7 @@ package net.hecco.nexuslib.platform;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.serialization.MapCodec;
+import net.hecco.nexuslib.NexusLib;
 import net.hecco.nexuslib.lib.util.ItemGroupAddition;
 import net.hecco.nexuslib.platform.services.NLRegistryHelper;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
@@ -308,8 +309,7 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
     public <T extends StructurePieceType> Supplier<T> registerStructurePiece(String modId, String id, Supplier<T> pieceType) {
         DeferredRegister<StructurePieceType> registry;
         var registries = startRegistry(modId);
-        if (!registries.containsKey(Registries.STRUCTURE_PIECE))
-        {
+        if (!registries.containsKey(Registries.STRUCTURE_PIECE)) {
             var i = DeferredRegister.create(Registries.STRUCTURE_PIECE, modId);
             i.register(eventBus);
             registries.put(Registries.STRUCTURE_PIECE, i);
@@ -324,8 +324,7 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
     public <P extends StructureProcessor> Supplier<StructureProcessorType<P>> registerStructureProcessor(String modId, String name, Supplier<MapCodec<P>> codec) {
         DeferredRegister<StructureProcessorType<P>> registry;
         var registries = startRegistry(modId);
-        if (!registries.containsKey(Registries.STRUCTURE_PROCESSOR))
-        {
+        if (!registries.containsKey(Registries.STRUCTURE_PROCESSOR)) {
             var i = DeferredRegister.create(Registries.STRUCTURE_PROCESSOR, modId);
             i.register(eventBus);
             registries.put(Registries.STRUCTURE_PROCESSOR, i);
@@ -343,14 +342,27 @@ public class NeoForgeRegistryHelper implements NLRegistryHelper {
                 items.forEach(addition -> {
                     switch (addition.type()) {
                         case ADD_AFTER -> {
-                            if (addition.origin().isEmpty()) throw new NullPointerException("Origin item for ADD_AFTER addition type cannot be empty!");
-                            event.insertAfter(addition.origin().get().asItem().getDefaultInstance(), addition.stack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                            if (addition.origin().isEmpty()) {
+                                NexusLib.LOGGER.warn("Error adding item stack {} to creative tab {}: Origin item for ADD_AFTER addition type cannot be empty!", addition.stack(), event.getTabKey());
+                            }
+                            try {
+                                event.insertAfter(addition.origin().get().asItem().getDefaultInstance(), addition.stack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                            } catch (IllegalArgumentException e) {
+                                NexusLib.LOGGER.warn("Tried to add item stack {} to creative tab {}, but origin stack {} was not found", addition.stack(), event.getTabKey(), addition.origin().get());
+                            }
                         }
                         case ADD_BEFORE -> {
-                            if (addition.origin().isEmpty()) throw new NullPointerException("Origin item for ADD_BEFORE addition type cannot be empty!");
-                            event.insertBefore(addition.origin().get().asItem().getDefaultInstance(), addition.stack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                            if (addition.origin().isEmpty()) {
+                                NexusLib.LOGGER.warn("Error adding item stack {} to creative tab {}: Origin item for ADD_BEFORE addition type cannot be empty!", addition.stack(), event.getTabKey());
+                            }
+                            try {
+                                event.insertBefore(addition.origin().get().asItem().getDefaultInstance(), addition.stack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                            } catch (IllegalArgumentException e) {
+                                NexusLib.LOGGER.warn("Tried to add item stack {} to creative tab {}, but origin stack {} was not found", addition.stack(), event.getTabKey(), addition.origin().get());
+                            }
                         }
-                        case ADD_LAST -> event.accept(addition.stack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                        case ADD_LAST ->
+                                event.accept(addition.stack(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
                     }
                 });
             }
