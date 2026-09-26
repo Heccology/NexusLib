@@ -1,10 +1,16 @@
 package net.hecco.nexuslib;
 
+import net.hecco.nexuslib.lib.selectedItemNametagRegistry.NLSelectedItemNametagRegistry;
 import net.hecco.nexuslib.lib.untintedParticleRegistry.NLUntintedParticleRegistry;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public class NexusLib {
 

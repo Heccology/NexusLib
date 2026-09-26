@@ -8,6 +8,7 @@
     "LiquidBlockMixin"
   ],
   "client": [
+    "GuiMixin"
   ],
   "server": [],
   "injectors": {
