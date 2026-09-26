@@ -1,5 +1,7 @@
 package net.hecco.nexuslib.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.hecco.nexuslib.lib.selectedItemNametagRegistry.NLSelectedItemNametagRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -42,5 +44,18 @@ public abstract class GuiMixin {
             ci.cancel();
             minecraft.getProfiler().pop();
         }
+    }
+
+    @ModifyExpressionValue(method = "tick()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;equals(Ljava/lang/Object;)Z"))
+    private boolean nexuslib$CorrectlyUpdateCustomItemNametags(boolean original, @Local(ordinal = 0) ItemStack itemstack) {
+        boolean condition = true;
+        if (NLSelectedItemNametagRegistry.getValues().containsKey(lastToolHighlight.getItem())) {
+            List<Component> strings = NLSelectedItemNametagRegistry.getValues().get(lastToolHighlight.getItem()).apply(lastToolHighlight, lastToolHighlight.getHoverName());
+            if (NLSelectedItemNametagRegistry.getValues().containsKey(itemstack.getItem())) {
+                List<Component> strings2 = NLSelectedItemNametagRegistry.getValues().get(itemstack.getItem()).apply(itemstack, itemstack.getHoverName());
+                condition = strings.equals(strings2);
+            }
+        }
+        return original && condition;
     }
 }
