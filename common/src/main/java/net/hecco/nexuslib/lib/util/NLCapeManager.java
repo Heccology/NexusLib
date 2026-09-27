@@ -220,6 +220,9 @@ public final class NLCapeManager {
         add(UUID.fromString("f09e6351-0b45-4bc8-bc80-48cbc64ad07e"), //MC_Polaris
                 cape("subterrous")
         );
+        add(UUID.fromString("f6b643c0-0710-4525-a2b0-5794414a4584"), //Twisted____
+                cape("subterrous")
+        );
 
         load();
     }
